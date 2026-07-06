@@ -315,19 +315,95 @@
         @media (max-width: 900px) {
             .login-card {
                 grid-template-columns: 1fr;
+                gap: 24px;
             }
             .hero-panel,
             .form-panel {
-                padding: 36px 28px;
+                padding: 32px 26px;
+            }
+            .hero-panel {
+                order: 2;
+                border-right: none;
+                border-top: 1px solid rgba(255,255,255,0.08);
+            }
+            .form-panel {
+                order: 1;
+            }
+            .hero-panel h1 {
+                font-size: 2.2rem;
+            }
+            .hero-badges {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .hero-panel {
+                padding: 30px 22px;
+            }
+            .form-panel {
+                padding: 30px 22px;
+            }
+            .hero-badges {
+                grid-template-columns: 1fr;
+            }
+            .hero-panel p {
+                max-width: 100%;
+            }
+            .hero-logo {
+                width: 130px;
+                height: 130px;
+            }
+            .hero-logo img {
+                width: 85%;
             }
         }
 
         @media (max-width: 560px) {
+            body {
+                padding: 12px;
+            }
+            .login-card {
+                border-radius: 24px;
+                box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+            }
+            .hero-panel {
+                padding: 26px 18px;
+            }
+            .form-panel {
+                padding: 26px 18px;
+            }
             .hero-panel h1 {
-                font-size: 2rem;
+                font-size: 1.75rem;
+            }
+            .hero-logo {
+                width: 110px;
+                height: 110px;
+            }
+            .hero-badge {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+            .input-wrap input {
+                padding: 12px 14px 12px 42px;
+            }
+            .btn-submit {
+                padding: 13px;
+                font-size: 0.95rem;
             }
             .login-footer {
-                margin-top: 22px;
+                margin-top: 20px;
+                font-size: 0.82rem;
+            }
+            .hero-panel {
+                text-align: center;
+            }
+            .hero-logo-wrap {
+                width: 100%;
+                margin: 0 auto;
+            }
+            .hero-badges {
+                gap: 12px;
             }
         }
     </style>
