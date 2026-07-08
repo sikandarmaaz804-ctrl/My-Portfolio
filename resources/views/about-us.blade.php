@@ -534,7 +534,7 @@
                         <img src="{{ asset('img/per.jpeg') }}" alt="Maaz Sikandar" class="profile-img">
                     </div>
                     <h3>Maaz Sikandar</h3>
-                    <p class="profile-subtitle">CEO — CodeEdge Solutions</p>
+                    <p class="profile-subtitle">CEO — CodeEdge Labs</p>
                     <p class="profile-tagline-role" style="font-size:0.92rem; color:#764ba2; font-weight:600; margin-bottom:6px; letter-spacing:0.5px;">
                         UI Designer / Full-Stack Developer
                     </p>
@@ -543,7 +543,7 @@
                     <ul class="info-list">
                         <li>
                             <div class="icon-box"><i class="lnr lnr-briefcase"></i></div>
-                            <span><strong>CEO</strong> — CodeEdge Solutions</span>
+                            <span><strong>CEO</strong> — CodeEdge Labs</span>
                         </li>
                         <li>
                             <div class="icon-box"><i class="lnr lnr-calendar-full"></i></div>
@@ -584,7 +584,7 @@
             <div class="col-lg-8">
                 <div class="about-text">
                     <h4>Who I Am</h4>
-                    <p>I'm <strong>Maaz Sikandar</strong>, CEO of <strong>CodeEdge Solutions</strong> and a passionate <strong>Software Developer</strong> with 6+ years of experience building modern, responsive web applications. I specialize in frontend technologies like <strong>React, Bootstrap, and Tailwind</strong>, along with backend development using <strong>Laravel</strong>.</p>
+                    <p>I'm <strong>Maaz Sikandar</strong>, CEO of <strong>CodeEdge Labs</strong> and a passionate <strong>Software Developer</strong> with 6+ years of experience building modern, responsive web applications. I specialize in frontend technologies like <strong>React, Bootstrap, and Tailwind</strong>, along with backend development using <strong>Laravel</strong>.</p>
                     
                     <p>My expertise spans the full development lifecycle — from concept and design to deployment and maintenance. I focus on writing <strong>clean, efficient code</strong> and creating <strong>user-friendly digital experiences</strong> that solve real-world problems.</p>
                     
@@ -614,9 +614,183 @@
     </div>
 </section>
 
-<!-- ================= STATS SECTION ================= -->
-<section class="stats-section">
+<!-- ================= TEAM PREVIEW SECTION ================= -->
+@if($members->isNotEmpty())
+<section style="padding: 90px 0 80px; background: #f0f2f8; position:relative;">
     <div class="container">
+
+        <div class="section-title">
+            <h2>Meet Our Team</h2>
+            <p>The talented minds at CodeEdge Labs — driven by passion, united by purpose.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            @foreach($members as $member)
+            <div class="col-lg-4 col-md-6">
+                <div class="tp-card">
+
+                    <!-- Full image block -->
+                    <div class="tp-img-block">
+                        <img src="{{ asset('uploads/' . $member->photo) }}"
+                             alt="{{ $member->name }}"
+                             loading="lazy">
+                        <div class="tp-overlay"></div>
+                        <span class="tp-exp-badge">{{ $member->experience_years }}+ yrs</span>
+                        <div class="tp-hover-strip">
+                            <p class="tp-hs-name">{{ $member->name }}</p>
+                            <p class="tp-hs-role">{{ $member->position }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="tp-body">
+                        <h4 class="tp-name">{{ $member->name }}</h4>
+                        <p class="tp-role">{{ $member->position }}</p>
+                        <span class="tp-tag">
+                            <i class="fas fa-code" style="font-size:0.7rem;"></i>
+                            {{ $member->expertise }}
+                        </span>
+                        <p class="tp-desc">{{ Str::limit($member->description, 110) }}</p>
+                    </div>
+
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ route('team') }}" style="
+                display:inline-flex; align-items:center; gap:10px;
+                padding: 14px 40px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color:#fff; border-radius:50px;
+                font-size:0.95rem; font-weight:700;
+                text-decoration:none;
+                box-shadow: 0 8px 28px rgba(102,126,234,0.38);
+                transition: all 0.3s ease;
+            "
+            onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 16px 38px rgba(102,126,234,0.48)'"
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 8px 28px rgba(102,126,234,0.38)'">
+                <i class="fa fa-users"></i> View Full Team
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<style>
+/* ── Team Preview Cards (About Us page) ── */
+.tp-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 28px rgba(15,12,41,0.09);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.tp-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 28px 64px rgba(102,126,234,0.20);
+}
+
+/* shine sweep */
+.tp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+.tp-card:hover::before { left: 160%; }
+
+.tp-img-block {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a2e, #302b63);
+    line-height: 0;
+}
+.tp-img-block img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
+    transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.55s ease;
+    filter: brightness(1.02) contrast(1.04) saturate(1.08);
+}
+.tp-card:hover .tp-img-block img {
+    transform: scale(1.05);
+    filter: brightness(1.05) contrast(1.07) saturate(1.12);
+}
+.tp-img-block::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 50px;
+    background: #fff;
+    clip-path: polygon(0 100%, 100% 100%, 100% 20%, 0 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+.tp-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(15,12,41,0.55) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+.tp-card:hover .tp-overlay { opacity: 1; }
+
+.tp-exp-badge {
+    position: absolute; top: 14px; right: 14px; z-index: 3;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; font-size: 11px; font-weight: 800;
+    padding: 4px 11px; border-radius: 20px;
+    box-shadow: 0 4px 14px rgba(102,126,234,0.4);
+    letter-spacing: 0.3px;
+}
+
+.tp-hover-strip {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+    padding: 12px 18px 20px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.tp-card:hover .tp-hover-strip { opacity: 1; transform: translateY(0); }
+.tp-hs-name { color:#fff; font-size:1rem; font-weight:800; margin:0 0 2px; text-shadow:0 2px 8px rgba(0,0,0,0.4); }
+.tp-hs-role { color:rgba(255,255,255,0.8); font-size:0.8rem; margin:0; }
+
+.tp-body {
+    padding: 20px 22px 24px;
+    flex: 1; display: flex; flex-direction: column;
+}
+.tp-name { font-size:1.08rem; font-weight:800; color:#1a1a2e; margin-bottom:2px; }
+.tp-role { font-size:0.84rem; font-weight:600; color:#667eea; margin-bottom:10px; }
+.tp-tag {
+    display:inline-flex; align-items:center; gap:6px;
+    background: rgba(102,126,234,0.08);
+    border: 1px solid rgba(102,126,234,0.14);
+    color:#764ba2; font-size:0.78rem; font-weight:600;
+    padding: 4px 12px; border-radius:20px; margin-bottom:12px;
+    transition: all 0.3s ease;
+}
+.tp-card:hover .tp-tag {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: transparent; color:#fff;
+}
+.tp-desc { color:#718096; font-size:0.87rem; line-height:1.75; flex:1; margin:0; }
+</style>
+@endif
+
+<!-- ================= STATS SECTION ================= -->
+<section class="stats-section">    <div class="container">
         <div class="row">
             <div class="col-6 col-md-3">
                 <div class="stat-item">

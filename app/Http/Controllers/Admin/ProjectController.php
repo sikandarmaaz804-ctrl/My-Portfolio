@@ -160,7 +160,7 @@ class ProjectController extends Controller
     private function deleteImage(?string $filename): void
     {
         if ($filename) {
-            $path = public_path('uploads/' . $filename);
+            $path = base_path('uploads' . DIRECTORY_SEPARATOR . $filename);
             if (File::exists($path)) {
                 File::delete($path);
             }

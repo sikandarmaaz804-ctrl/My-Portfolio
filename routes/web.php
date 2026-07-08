@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
+use App\Http\Controllers\Admin\TeamMemberController as AdminTeamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,9 +70,20 @@ Route::post('/contact', [ContactController::class, 'store'])
 |--------------------------------------------------------------------------
 */
 Route::get('/about-us', function () {
-    $resume = \App\Models\Setting::get('resume');
-    return view('about-us', compact('resume'));
+    $resume  = \App\Models\Setting::get('resume');
+    $members = \App\Models\TeamMember::orderBy('sort_order')->orderBy('id')->take(6)->get();
+    return view('about-us', compact('resume', 'members'));
 })->name('about-us');
+
+/*
+|--------------------------------------------------------------------------
+| OUR TEAM
+|--------------------------------------------------------------------------
+*/
+Route::get('/our-team', function () {
+    $members = \App\Models\TeamMember::orderBy('sort_order')->orderBy('id')->get();
+    return view('team', compact('members'));
+})->name('team');
 
 /*
 |--------------------------------------------------------------------------
@@ -147,6 +159,16 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
     */
     Route::resource('projects', AdminProjectController::class)
         ->names('admin.projects');
+
+    /*
+    |--------------------------------------------------------------------------
+    | TEAM MEMBERS (ADMIN FULL CRUD ✅)
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('team', AdminTeamController::class)
+        ->names('admin.team')
+        ->parameters(['team' => 'team'])
+        ->except(['show']);
 
     /*
     |--------------------------------------------------------------------------

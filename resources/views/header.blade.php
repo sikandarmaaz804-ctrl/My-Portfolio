@@ -8,9 +8,9 @@
     <title>Maaz Sikandar — Full Stack Developer</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="{{ asset('img/company logo.jpeg') }}">
-    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('img/company logo.jpeg') }}">
-    <link rel="apple-touch-icon" href="{{ asset('img/company logo.jpeg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/company logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('img/company logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/company logo.png') }}">
 
     <!-- Bootstrap CSS (KEEP ORIGINAL) -->
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -364,6 +364,10 @@
 
                         <li class="nav-item {{ Route::currentRouteName() === 'about-us' ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('about-us') }}">About</a>
+                        </li>
+
+                        <li class="nav-item {{ Route::currentRouteName() === 'team' ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('team') }}">Our Team</a>
                         </li>
 
                         <li class="nav-item {{ Route::currentRouteName() === 'portfolio' ? 'active' : '' }}">

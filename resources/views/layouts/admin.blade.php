@@ -6,9 +6,9 @@
     <title>Admin Panel — @yield('page_title', 'Dashboard')</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="{{ asset('img/company logo.jpeg') }}">
-    <link rel="shortcut icon" type="image/jpeg" href="{{ asset('img/company logo.jpeg') }}">
-    <link rel="apple-touch-icon" href="{{ asset('img/company logo.jpeg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('img/company logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('img/company logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('img/company logo.png') }}">
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -612,6 +612,16 @@
             <i class="bi bi-folder-plus"></i> Add Project
         </a>
 
+        <a href="{{ route('admin.team.index') }}"
+           class="nav-link-item {{ request()->routeIs('admin.team*') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i> Team Members
+        </a>
+
+        <a href="{{ route('admin.team.create') }}"
+           class="nav-link-item {{ request()->routeIs('admin.team.create') ? 'active' : '' }}">
+            <i class="bi bi-person-plus-fill"></i> Add Member
+        </a>
+
         <a href="{{ route('admin.resume') }}"
            class="nav-link-item {{ request()->routeIs('admin.resume') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-person-fill"></i> Resume
@@ -762,7 +772,7 @@
     </div>
 
     <footer class="admin-footer">
-        <span>© {{ date('Y') }} Admin Panel — Maaz Sikandar &nbsp;|&nbsp; <strong>CodeEdge Solutions</strong></span>
+        <span>© {{ date('Y') }} Admin Panel — Maaz Sikandar &nbsp;|&nbsp; <strong>CodeEdge Labs</strong></span>
         <span>Built with Laravel & Bootstrap 5</span>
     </footer>
 </main>
