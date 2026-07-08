@@ -650,6 +650,16 @@
            class="nav-link-item {{ request()->routeIs('admin.system') ? 'active' : '' }}">
             <i class="bi bi-gear-fill"></i> System Utilities
         </a>
+
+        <a href="{{ route('admin.roles.index') }}"
+           class="nav-link-item {{ request()->routeIs('admin.roles*') ? 'active' : '' }}">
+            <i class="bi bi-shield-lock-fill"></i> Roles & Permissions
+        </a>
+
+        <a href="{{ route('admin.role-users.index') }}"
+           class="nav-link-item {{ request()->routeIs('admin.role-users*') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i> Role Users
+        </a>
     </div>
 
     <!-- Footer -->

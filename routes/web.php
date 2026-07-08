@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\TeamMemberController as AdminTeamController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\RoleUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -218,4 +220,25 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
     Route::get('/resume', [AdminController::class, 'resumeForm'])->name('admin.resume');
     Route::post('/resume', [AdminController::class, 'uploadResume'])->name('admin.resume.upload');
     Route::delete('/resume', [AdminController::class, 'deleteResume'])->name('admin.resume.delete');
+
+    /*
+    |--------------------------------------------------------------------------
+    | ROLES & PERMISSIONS (main admin only)
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('roles', RoleController::class)
+        ->names('admin.roles')
+        ->except(['show']);
+
+    Route::post('/roles/seed-permissions', [RoleController::class, 'seedPermissions'])
+        ->name('admin.roles.seed');
+
+    // Sub-admin (role user) management
+    Route::resource('role-users', RoleUserController::class)
+        ->names('admin.role-users')
+        ->parameters(['role-users' => 'roleUser'])
+        ->except(['show']);
+
+    Route::post('/role-users/{roleUser}/toggle-status', [RoleUserController::class, 'toggleStatus'])
+        ->name('admin.role-users.toggle');
 });
