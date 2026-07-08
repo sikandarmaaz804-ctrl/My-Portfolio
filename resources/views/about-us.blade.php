@@ -592,10 +592,21 @@
 
                     <p>I believe in the power of <strong>collaboration, continuous learning</strong>, and delivering solutions that not only meet but exceed expectations. Whether building from scratch or optimizing existing systems, I bring dedication, technical expertise, and a user-first mindset.</p>
 
-                    <a href="#" class="download-btn">
-                        <i class="fa fa-download"></i>
-                        <span>Download Resume</span>
-                    </a>
+                    @if(!empty($resume))
+                        <a href="{{ route('resume.download') }}"
+                           class="download-btn"
+                           download>
+                            <i class="fa fa-download"></i>
+                            <span>Download Resume</span>
+                        </a>
+                    @else
+                        <span class="download-btn"
+                              style="opacity:0.45; cursor:not-allowed; pointer-events:none;"
+                              title="Resume not available yet">
+                            <i class="fa fa-download"></i>
+                            <span>Download Resume</span>
+                        </span>
+                    @endif
                 </div>
             </div>
 

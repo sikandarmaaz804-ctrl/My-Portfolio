@@ -611,6 +611,11 @@
            class="nav-link-item {{ request()->routeIs('admin.projects.create') ? 'active' : '' }}">
             <i class="bi bi-folder-plus"></i> Add Project
         </a>
+
+        <a href="{{ route('admin.resume') }}"
+           class="nav-link-item {{ request()->routeIs('admin.resume') ? 'active' : '' }}">
+            <i class="bi bi-file-earmark-person-fill"></i> Resume
+        </a>
     </div>
 
     <!-- Communications -->
@@ -649,7 +654,7 @@
         <a href="{{ route('admin.logout') }}"
            class="nav-link-item mt-3"
            style="color: rgba(239,68,68,0.7);"
-           onclick="return confirm('Logout?')">
+           onclick="event.preventDefault(); confirmAction('Are you sure you want to logout?', '{{ route('admin.logout') }}');">
             <i class="bi bi-box-arrow-right"></i> Logout
         </a>
     </div>
@@ -692,7 +697,7 @@
             <!-- User -->
             <a href="{{ route('admin.logout') }}"
                class="topbar-user"
-               onclick="return confirm('Are you sure you want to logout?')">
+               onclick="event.preventDefault(); confirmAction('Are you sure you want to logout?', '{{ route('admin.logout') }}');">
                 <div class="t-avatar">M</div>
                 <span class="t-name">Logout</span>
                 <i class="bi bi-box-arrow-right" style="font-size:13px;"></i>
@@ -724,7 +729,7 @@
                 <div class="mobile-menu-divider"></div>
                 <a href="{{ route('admin.logout') }}"
                    class="mobile-menu-item text-danger"
-                   onclick="return confirm('Are you sure you want to logout?')">
+                   onclick="event.preventDefault(); confirmAction('Are you sure you want to logout?', '{{ route('admin.logout') }}');">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Logout</span>
                 </a>
@@ -762,10 +767,114 @@
     </footer>
 </main>
 
+<!-- ═══ CONFIRM MODAL ════════════════════════════════════════ -->
+<div id="confirmModal" aria-hidden="true" style="
+    display:none;
+    position:fixed;inset:0;
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+">
+    <!-- Backdrop -->
+    <div id="confirmBackdrop" onclick="closeConfirmModal()" style="
+        position:absolute;inset:0;
+        background:rgba(15,23,42,0.55);
+        backdrop-filter:blur(4px);
+        -webkit-backdrop-filter:blur(4px);
+        animation:fadeIn 0.2s ease;
+    "></div>
+
+    <!-- Dialog -->
+    <div id="confirmDialog" role="dialog" aria-modal="true" style="
+        position:relative;z-index:1;
+        background:#fff;
+        border-radius:20px;
+        padding:36px 32px 28px;
+        width:100%;max-width:400px;
+        box-shadow:0 32px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+        animation:popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        text-align:center;
+    ">
+        <!-- Icon -->
+        <div style="
+            width:62px;height:62px;
+            border-radius:18px;
+            background:rgba(239,68,68,0.08);
+            display:flex;align-items:center;justify-content:center;
+            margin:0 auto 20px;
+        ">
+            <i id="confirmIcon" class="bi bi-exclamation-triangle-fill" style="font-size:26px;color:#ef4444;"></i>
+        </div>
+
+        <!-- Title -->
+        <h5 id="confirmTitle" style="
+            font-size:1.1rem;font-weight:700;
+            color:#1e293b;margin:0 0 10px;
+        ">Confirm Action</h5>
+
+        <!-- Message -->
+        <p id="confirmMessage" style="
+            font-size:0.92rem;color:#64748b;
+            line-height:1.6;margin:0 0 28px;
+        ">Are you sure?</p>
+
+        <!-- Buttons -->
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <button onclick="closeConfirmModal()" style="
+                flex:1;
+                padding:11px 20px;
+                border-radius:12px;
+                border:1.5px solid #e2e8f0;
+                background:#f8fafc;
+                color:#475569;
+                font-size:0.92rem;font-weight:600;
+                font-family:inherit;
+                cursor:pointer;
+                transition:all 0.2s;
+            "
+            onmouseover="this.style.borderColor='#94a3b8';this.style.background='#f1f5f9'"
+            onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'"
+            >
+                Cancel
+            </button>
+            <button id="confirmOkBtn" onclick="executeConfirmAction()" style="
+                flex:1;
+                padding:11px 20px;
+                border-radius:12px;
+                border:none;
+                background:linear-gradient(135deg,#ef4444,#dc2626);
+                color:#fff;
+                font-size:0.92rem;font-weight:700;
+                font-family:inherit;
+                cursor:pointer;
+                box-shadow:0 6px 18px rgba(239,68,68,0.3);
+                transition:all 0.2s;
+            "
+            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 10px 24px rgba(239,68,68,0.38)'"
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 18px rgba(239,68,68,0.3)'"
+            >
+                <i class="bi bi-check-lg me-1"></i> Confirm
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes fadeIn {
+    from { opacity:0; } to { opacity:1; }
+}
+@keyframes popIn {
+    from { opacity:0; transform:scale(0.88) translateY(20px); }
+    to   { opacity:1; transform:scale(1)    translateY(0);    }
+}
+</style>
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // ── Sidebar ────────────────────────────────────────────
     function openSidebar() {
         document.getElementById('sidebar').classList.add('open');
         document.getElementById('sidebar-overlay').classList.add('active');
@@ -776,30 +885,109 @@
         document.getElementById('sidebar-overlay').classList.remove('active');
         document.body.style.overflow = '';
     }
-    
+
     // Mobile dropdown toggle
     function toggleMobileMenu() {
         const dropdown = document.getElementById('mobileDropdown');
         dropdown.classList.toggle('active');
     }
-    
+
     // Close dropdown when clicking outside
     document.addEventListener('click', function(event) {
         const dropdown = document.getElementById('mobileDropdown');
-        const toggle = document.querySelector('.topbar-menu-toggle');
-        
+        const toggle   = document.querySelector('.topbar-menu-toggle');
         if (dropdown && toggle && !dropdown.contains(event.target) && !toggle.contains(event.target)) {
             dropdown.classList.remove('active');
         }
     });
-    
+
     // Close on Escape
-    document.addEventListener('keydown', e => { 
+    document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
             closeSidebar();
             document.getElementById('mobileDropdown')?.classList.remove('active');
+            closeConfirmModal();
         }
     });
+
+    // ── Custom Confirm Modal ───────────────────────────────
+    let _confirmCallback = null;
+
+    /**
+     * confirmAction(message, hrefOrCallback, options)
+     * options: { title, icon, danger }
+     */
+    function confirmAction(message, hrefOrCallback, options = {}) {
+        const modal   = document.getElementById('confirmModal');
+        const title   = document.getElementById('confirmTitle');
+        const msg     = document.getElementById('confirmMessage');
+        const icon    = document.getElementById('confirmIcon');
+        const okBtn   = document.getElementById('confirmOkBtn');
+
+        title.textContent = options.title   || 'Confirm Action';
+        msg.textContent   = message;
+
+        const isDanger = options.danger !== false; // default true
+        const iconClass = options.icon || (isDanger ? 'bi bi-exclamation-triangle-fill' : 'bi bi-question-circle-fill');
+        const iconColor = isDanger ? '#ef4444' : '#6366f1';
+        const iconBg    = isDanger ? 'rgba(239,68,68,0.08)' : 'rgba(99,102,241,0.08)';
+        const btnBg     = isDanger
+            ? 'linear-gradient(135deg,#ef4444,#dc2626)'
+            : 'linear-gradient(135deg,#4f46e5,#6366f1)';
+        const btnShadow = isDanger
+            ? '0 6px 18px rgba(239,68,68,0.3)'
+            : '0 6px 18px rgba(99,102,241,0.3)';
+
+        icon.className        = iconClass;
+        icon.style.color      = iconColor;
+        icon.parentElement.style.background = iconBg;
+        okBtn.style.background  = btnBg;
+        okBtn.style.boxShadow   = btnShadow;
+        okBtn.onmouseover = function() {
+            this.style.transform  = 'translateY(-1px)';
+            this.style.boxShadow  = isDanger
+                ? '0 10px 24px rgba(239,68,68,0.38)'
+                : '0 10px 24px rgba(99,102,241,0.38)';
+        };
+        okBtn.onmouseout = function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = btnShadow;
+        };
+
+        if (typeof hrefOrCallback === 'function') {
+            _confirmCallback = hrefOrCallback;
+        } else {
+            _confirmCallback = () => { window.location.href = hrefOrCallback; };
+        }
+
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        // Focus the cancel button for accessibility
+        setTimeout(() => document.querySelector('#confirmModal button')?.focus(), 50);
+    }
+
+    function closeConfirmModal() {
+        const modal = document.getElementById('confirmModal');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        _confirmCallback = null;
+    }
+
+    function executeConfirmAction() {
+        const cb = _confirmCallback;
+        closeConfirmModal();
+        if (typeof cb === 'function') cb();
+    }
+
+    // Form-based confirm helper (for delete forms etc.)
+    function confirmForm(message, formId, options = {}) {
+        confirmAction(message, () => {
+            document.getElementById(formId).submit();
+        }, options);
+    }
 </script>
 
 @stack('scripts')

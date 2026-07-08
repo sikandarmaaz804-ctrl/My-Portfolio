@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class AdminController extends Controller
 {
@@ -15,6 +17,61 @@ class AdminController extends Controller
     public function system()
     {
         return view('admin.system');
+    }
+
+    // ─── RESUME ──────────────────────────────────────────────────────────
+
+    public function resumeForm()
+    {
+        $resume = Setting::get('resume');
+        return view('admin.resume', compact('resume'));
+    }
+
+    public function uploadResume(Request $request)
+    {
+        $request->validate([
+            'resume' => 'required|file|mimes:pdf|max:10240',
+        ]);
+
+        $uploadPath = base_path('uploads');
+
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true, true);
+        }
+
+        // Delete the old resume file if it exists
+        $oldResume = Setting::get('resume');
+        if ($oldResume) {
+            $oldPath = $uploadPath . DIRECTORY_SEPARATOR . $oldResume;
+            if (File::exists($oldPath)) {
+                File::delete($oldPath);
+            }
+        }
+
+        $file     = $request->file('resume');
+        $filename = 'resume_' . time() . '.pdf';
+        $file->move($uploadPath, $filename);
+
+        Setting::set('resume', $filename);
+
+        return redirect()->route('admin.resume')
+            ->with('success', 'Resume uploaded successfully!');
+    }
+
+    public function deleteResume()
+    {
+        $filename = Setting::get('resume');
+
+        if ($filename) {
+            $path = base_path('uploads') . DIRECTORY_SEPARATOR . $filename;
+            if (File::exists($path)) {
+                File::delete($path);
+            }
+            Setting::set('resume', null);
+        }
+
+        return redirect()->route('admin.resume')
+            ->with('success', 'Resume deleted successfully.');
     }
 
     public function runCommand(Request $request)

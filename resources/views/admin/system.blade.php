@@ -78,10 +78,13 @@
                                 <h6 class="font-weight-bold mb-1"><i class="bi bi-database-fill-gear text-success"></i> Run Migrations</h6>
                                 <p class="text-muted small mb-3">Runs outstanding database schema migrations. Safe in production using the <code>--force</code> flag.</p>
                             </div>
-                            <form action="{{ route('admin.system.run_command') }}" method="POST" onsubmit="return confirm('Run database migrations on live database?')">
+                            <form action="{{ route('admin.system.run_command') }}" method="POST" id="migrateForm">
                                 @csrf
                                 <input type="hidden" name="command" value="migrate">
-                                <button type="submit" class="btn-ghost w-100 justify-content-center text-success" style="border-color: rgba(16,185,129,0.3)">
+                                <button type="button"
+                                        class="btn-ghost w-100 justify-content-center text-success"
+                                        style="border-color: rgba(16,185,129,0.3)"
+                                        onclick="confirmForm('Run database migrations on the live database?', 'migrateForm', {title:'Run Migrations', danger:false})">
                                     <i class="bi bi-database-fill-gear"></i> Run Migrations
                                 </button>
                             </form>

@@ -69,8 +69,33 @@ Route::post('/contact', [ContactController::class, 'store'])
 |--------------------------------------------------------------------------
 */
 Route::get('/about-us', function () {
-    return view('about-us');
+    $resume = \App\Models\Setting::get('resume');
+    return view('about-us', compact('resume'));
 })->name('about-us');
+
+/*
+|--------------------------------------------------------------------------
+| RESUME DOWNLOAD (public)
+|--------------------------------------------------------------------------
+*/
+Route::get('/resume/download', function () {
+    $filename = \App\Models\Setting::get('resume');
+
+    if (!$filename) {
+        abort(404, 'Resume not available.');
+    }
+
+    $path = base_path('uploads' . DIRECTORY_SEPARATOR . $filename);
+
+    if (!\Illuminate\Support\Facades\File::exists($path)) {
+        abort(404, 'Resume file not found.');
+    }
+
+    return response()->download($path, 'Maaz_Sikandar_Resume.pdf', [
+        'Content-Type'        => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="Maaz_Sikandar_Resume.pdf"',
+    ]);
+})->name('resume.download');
 
 /*
 |--------------------------------------------------------------------------
@@ -166,4 +191,9 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
     // System Utilities
     Route::get('/system', [AdminController::class, 'system'])->name('admin.system');
     Route::post('/system/run-command', [AdminController::class, 'runCommand'])->name('admin.system.run_command');
+
+    // Resume
+    Route::get('/resume', [AdminController::class, 'resumeForm'])->name('admin.resume');
+    Route::post('/resume', [AdminController::class, 'uploadResume'])->name('admin.resume.upload');
+    Route::delete('/resume', [AdminController::class, 'deleteResume'])->name('admin.resume.delete');
 });

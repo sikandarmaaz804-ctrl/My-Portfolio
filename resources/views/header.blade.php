@@ -335,7 +335,7 @@
                 <!-- LOGO -->
                 <a class="navbar-brand nav-logo" href="{{ route('home') }}">
                     <span class="logo-bracket">{</span>
-                    <span class="logo-name">MaazDev</span>
+                    <span class="logo-name">CodeEdge <span class="text-primary">Labs</span>
                     <span class="logo-bracket">}</span>
                     <span class="logo-dot">&nbsp;.</span>
                 </a>
