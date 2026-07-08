@@ -29,8 +29,13 @@ class ContactController extends Controller
             'message' => $request->message,
         ]);
 
-        // Send confirmation email to user
-        Mail::send(new ContactConfirmationMail($contact));
+        // Send confirmation email to user immediately (not queued)
+        try {
+            Mail::send(new ContactConfirmationMail($contact));
+        } catch (\Exception $e) {
+            // Log error but don't prevent form submission
+            \Log::error('Contact confirmation email failed: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Message sent successfully! Please check your email for confirmation.');
     }
