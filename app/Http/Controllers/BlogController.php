@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -69,18 +70,25 @@ class BlogController extends Controller
             'description' => 'required'
         ]);
 
-        // Upload image
-        $imageName = time() . '_' . $request->image->getClientOriginalName();
-        $request->image->move(public_path('uploads'), $imageName);
+        $uploadPath = public_path('uploads/blogs');
+
+        if (!File::exists($uploadPath)) {
+            File::makeDirectory($uploadPath, 0755, true);
+        }
+
+        $extension = strtolower($request->file('image')->getClientOriginalExtension());
+        $baseName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
+        $imageName = now()->format('YmdHis') . '_' . Str::slug($baseName) . '.' . $extension;
+        $request->file('image')->move($uploadPath, $imageName);
 
         // Save blog
         Blog::create([
             'title' => $request->title,
-            'image' => $imageName,
+            'image' => 'blogs/' . $imageName,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.uploads')
+        return redirect()->route('admin.blogs')
                          ->with('success', 'Blog created successfully!');
     }
 

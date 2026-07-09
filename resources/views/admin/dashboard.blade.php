@@ -174,7 +174,7 @@
             <div class="card-body-p p-0">
                 @forelse($recentBlogs as $blog)
                 <div style="display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--border);">
-                    <img src="{{ asset('uploads/'.$blog->image) }}"
+                    <img src="{{ $blog->image_url }}"
                          style="width:46px; height:46px; border-radius:10px; object-fit:cover; flex-shrink:0;"
                          onerror="this.src='https://via.placeholder.com/46'">
                     <div style="flex:1; min-width:0;">

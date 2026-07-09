@@ -12,11 +12,12 @@ class CheckPermission
      * Handle an incoming request.
      *
      * Usage in route: ->middleware('permission:contacts.view')
+     * Allow any of multiple permissions: ->middleware('permission:blogs.view,blogs.create')
      *
      * The main admin (guard 'admin') bypasses all permission checks.
-     * Sub-admins (guard 'role_user') must have the given permission.
+     * Sub-admins (guard 'role_user') must have at least one given permission.
      */
-    public function handle(Request $request, Closure $next, string $permission): mixed
+    public function handle(Request $request, Closure $next, string ...$permissions): mixed
     {
         // Main admin — full access, no restriction
         if (Auth::guard('admin')->check()) {
@@ -40,7 +41,11 @@ class CheckPermission
         // Load role + permissions (cached per request)
         $roleUser->loadMissing('role.permissions');
 
-        if (!$roleUser->hasPermission($permission)) {
+        $hasPermission = collect($permissions)->contains(
+            fn (string $permission): bool => $roleUser->hasPermission($permission)
+        );
+
+        if (!$hasPermission) {
             abort(403, 'You do not have permission to perform this action.');
         }
 

@@ -755,7 +755,7 @@
                         <div class="blog-card">
                             <div class="img-wrap">
                                 @if($blog->image)
-                                <img src="{{ asset('uploads/' . $blog->image) }}" alt="{{ $blog->title }}" onerror="this.src='https://via.placeholder.com/600x210/766dff/fff?text=Blog'">
+                                <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}" onerror="this.src='https://via.placeholder.com/600x210/766dff/fff?text=Blog'">
                                 @else
                                 <img src="https://via.placeholder.com/600x210/766dff/fff?text=Blog" alt="{{ $blog->title }}">
                                 @endif
@@ -834,7 +834,7 @@
                     <div class="sw-body">
                         @foreach($blogs->take(4) as $recent)
                         <div class="recent-post openBlogModal" data-id="{{ $recent->id }}">
-                            <img src="{{ asset('uploads/' . $recent->image) }}" alt="{{ $recent->title }}"
+                            <img src="{{ $recent->image_url }}" alt="{{ $recent->title }}"
                                  onerror="this.src='https://via.placeholder.com/56x56/766dff/fff'">
                             <div class="rp-info">
                                 <div class="rp-title">{{ Str::limit($recent->title, 48) }}</div>

@@ -613,7 +613,7 @@
         <div class="sidebar-section-label">Content</div>
 
         @if($showBlogsSection)
-            @if(PermissionHelper::can('blogs.view'))
+            @if($showBlogsSection)
             <a href="{{ route('admin.blogs') }}"
                class="nav-link-item {{ request()->routeIs('admin.blogs') ? 'active' : '' }}">
                 <i class="bi bi-journal-richtext"></i> All Blogs
@@ -627,7 +627,7 @@
             </a>
             @endif
 
-            @if(PermissionHelper::can('blogs.view'))
+            @if($showBlogsSection)
             <a href="{{ route('admin.uploads') }}"
                class="nav-link-item {{ request()->routeIs('admin.uploads') ? 'active' : '' }}">
                 <i class="bi bi-images"></i> Media Library

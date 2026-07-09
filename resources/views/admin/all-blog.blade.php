@@ -10,9 +10,11 @@
         <h1>All Blogs</h1>
         <p>Manage all your blog posts in one place.</p>
     </div>
+    @if(\App\Helpers\PermissionHelper::can('blogs.create'))
     <a href="{{ route('admin.blog') }}" class="btn-primary-custom">
         <i class="bi bi-plus-lg"></i> New Blog
     </a>
+    @endif
 </div>
 
 <!-- Blogs Grid -->
@@ -23,7 +25,7 @@
         <div class="admin-card h-100">
             <!-- Image -->
             <div style="position:relative; overflow:hidden;">
-                <img src="{{ asset('uploads/'.$blog->image) }}"
+                <img src="{{ $blog->image_url }}"
                      style="width:100%; height:180px; object-fit:cover; display:block;"
                      onerror="this.src='https://via.placeholder.com/400x180'">
                 <div style="position:absolute; top:10px; right:10px;">
@@ -51,9 +53,11 @@
                     <a href="{{ route('blog.popup', $blog->id) }}" target="_blank" class="btn-info-custom" style="flex:1; justify-content:center;">
                         <i class="bi bi-eye"></i> View
                     </a>
+                    @if(\App\Helpers\PermissionHelper::can('blogs.delete'))
                     <button type="button" class="btn-danger-custom delete-blog" data-id="{{ $blog->id }}" style="flex:1; justify-content:center;">
                         <i class="bi bi-trash"></i> Delete
                     </button>
+                    @endif
                 </div>
 
                 <!-- Hidden delete form -->
@@ -72,9 +76,11 @@
         <i class="bi bi-journal-x" style="font-size:64px; opacity:0.15; display:block; margin-bottom:16px;"></i>
         <h5 style="color:var(--text-muted); margin-bottom:8px;">No Blogs Found</h5>
         <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Start creating amazing content for your audience.</p>
+        @if(\App\Helpers\PermissionHelper::can('blogs.create'))
         <a href="{{ route('admin.blog') }}" class="btn-primary-custom">
             <i class="bi bi-plus-lg"></i> Create First Blog
         </a>
+        @endif
     </div>
 </div>
 @endif

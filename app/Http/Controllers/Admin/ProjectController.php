@@ -144,7 +144,7 @@ class ProjectController extends Controller
             return null;
         }
 
-        $uploadPath = base_path('uploads');
+        $uploadPath = public_path('uploads');
 
         if (!File::exists($uploadPath)) {
             File::makeDirectory($uploadPath, 0755, true, true);
@@ -160,7 +160,7 @@ class ProjectController extends Controller
     private function deleteImage(?string $filename): void
     {
         if ($filename) {
-            $path = base_path('uploads' . DIRECTORY_SEPARATOR . $filename);
+            $path = public_path('uploads' . DIRECTORY_SEPARATOR . $filename);
             if (File::exists($path)) {
                 File::delete($path);
             }

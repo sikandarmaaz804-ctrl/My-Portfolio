@@ -303,7 +303,7 @@ textarea.cf-input {
 {{-- HERO IMAGE --}}
 @if($blog->image)
 <div class="popup-hero">
-    <img src="{{ asset('uploads/' . $blog->image) }}"
+    <img src="{{ $blog->image_url }}"
          alt="{{ $blog->title }}"
          onerror="this.src='https://via.placeholder.com/900x380/766dff/fff?text=Blog'">
     <div class="ph-overlay"></div>

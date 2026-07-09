@@ -205,7 +205,7 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::get('/blogs', [BlogController::class, 'adminIndex'])
-        ->name('admin.blogs')->middleware('permission:blogs.view');
+        ->name('admin.blogs')->middleware('permission:blogs.view,blogs.create');
 
     Route::get('/blog', function () {
         return view('admin.add-blog');
@@ -218,7 +218,7 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
         ->name('admin.blog.delete')->middleware('permission:blogs.delete');
 
     Route::get('/uploads', [BlogController::class, 'uploads'])
-        ->name('admin.uploads')->middleware('permission:blogs.view');
+        ->name('admin.uploads')->middleware('permission:blogs.view,blogs.create');
 
     /*
     |--------------------------------------------------------------------------

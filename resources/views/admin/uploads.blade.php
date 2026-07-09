@@ -10,9 +10,11 @@
         <h1>Media Library</h1>
         <p>All uploaded blog images — {{ $blogs->count() }} {{ Str::plural('item', $blogs->count()) }}.</p>
     </div>
+    @if(\App\Helpers\PermissionHelper::can('blogs.create'))
     <a href="{{ route('admin.blog') }}" class="btn-primary-custom">
         <i class="bi bi-plus-lg"></i> Upload New
     </a>
+    @endif
 </div>
 
 @if($blogs->count())
@@ -52,13 +54,13 @@
 
             <!-- Image -->
             <div style="position:relative; overflow:hidden;">
-                <img src="{{ asset('uploads/'.$blog->image) }}"
+                <img src="{{ $blog->image_url }}"
                      class="media-img"
                      style="width:100%; height:160px; object-fit:cover; display:block; transition:transform 0.3s;"
                      onerror="this.src='https://via.placeholder.com/300x160'">
                 <!-- Overlay on hover -->
                 <div class="media-overlay" style="position:absolute; inset:0; background:rgba(15,23,42,0.55); display:flex; align-items:center; justify-content:center; gap:10px; opacity:0; transition:opacity 0.25s;">
-                    <a href="{{ asset('uploads/'.$blog->image) }}" target="_blank"
+                    <a href="{{ $blog->image_url }}" target="_blank"
                        class="topbar-btn" style="background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.3); color:#fff;"
                        title="View Full Image">
                         <i class="bi bi-eye"></i>
@@ -81,12 +83,14 @@
                        class="btn-info-custom" style="flex:1; justify-content:center; padding:6px 10px; font-size:11px;">
                         <i class="bi bi-eye"></i>
                     </a>
+                    @if(\App\Helpers\PermissionHelper::can('blogs.delete'))
                     <button type="button"
                             class="btn-danger-custom delete-btn"
                             data-id="{{ $blog->id }}"
                             style="flex:1; justify-content:center; padding:6px 10px; font-size:11px;">
                         <i class="bi bi-trash"></i>
                     </button>
+                    @endif
                 </div>
 
                 <!-- Hidden delete form -->
@@ -109,9 +113,11 @@
         <i class="bi bi-images" style="font-size:72px; opacity:0.1; display:block; margin-bottom:20px;"></i>
         <h5 style="color:var(--text-muted); margin-bottom:8px;">No Uploads Yet</h5>
         <p style="color:var(--text-muted); font-size:14px; margin-bottom:24px;">Create a blog post to upload your first image.</p>
+        @if(\App\Helpers\PermissionHelper::can('blogs.create'))
         <a href="{{ route('admin.blog') }}" class="btn-primary-custom">
             <i class="bi bi-cloud-upload"></i> Upload First Image
         </a>
+        @endif
     </div>
 </div>
 
