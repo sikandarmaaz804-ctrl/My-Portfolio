@@ -4,6 +4,10 @@
 
 @section('content')
 
+@php
+    use App\Helpers\PermissionHelper;
+@endphp
+
 <!-- Page Header -->
 <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
     <div>
@@ -11,18 +15,24 @@
         <p>{{ $roles->count() }} {{ Str::plural('role', $roles->count()) }} defined. Each role controls what a sub-admin can do.</p>
     </div>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        @if(PermissionHelper::can('roles.create'))
         <form action="{{ route('admin.roles.seed') }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" class="btn-ghost">
                 <i class="bi bi-arrow-repeat"></i> Sync Permissions
             </button>
         </form>
+        @endif
+        @if(PermissionHelper::can('roles.users'))
         <a href="{{ route('admin.role-users.index') }}" class="btn-ghost">
             <i class="bi bi-people-fill"></i> Manage Users
         </a>
+        @endif
+        @if(PermissionHelper::can('roles.create'))
         <a href="{{ route('admin.roles.create') }}" class="btn-primary-custom">
             <i class="bi bi-plus-lg"></i> New Role
         </a>
+        @endif
     </div>
 </div>
 
@@ -33,9 +43,11 @@
         <i class="bi bi-shield-lock" style="font-size:56px; opacity:0.2; display:block; margin-bottom:16px;"></i>
         <h5 style="font-weight:700; margin-bottom:8px;">No roles yet</h5>
         <p style="margin-bottom:20px;">Create your first role and assign permissions to it.</p>
+        @if(PermissionHelper::can('roles.create'))
         <a href="{{ route('admin.roles.create') }}" class="btn-primary-custom">
             <i class="bi bi-plus-lg"></i> Create First Role
         </a>
+        @endif
     </div>
 </div>
 @else
@@ -107,12 +119,17 @@
 
             <!-- Actions -->
             <div style="padding:14px 22px; display:flex; gap:8px; flex-wrap:wrap;">
+                @if(PermissionHelper::can('roles.edit'))
                 <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn-info-custom" style="font-size:12px; padding:6px 14px;">
                     <i class="bi bi-pencil"></i> Edit
                 </a>
+                @endif
+                @if(PermissionHelper::can('roles.users'))
                 <a href="{{ route('admin.role-users.index') }}?role={{ $role->id }}" class="btn-success-custom" style="font-size:12px; padding:6px 14px;">
                     <i class="bi bi-people"></i> Users
                 </a>
+                @endif
+                @if(PermissionHelper::can('roles.delete'))
                 <form id="del-role-{{ $role->id }}" action="{{ route('admin.roles.destroy', $role->id) }}" method="POST" style="display:inline;">
                     @csrf @method('DELETE')
                     <button type="button"
@@ -122,6 +139,7 @@
                         <i class="bi bi-trash"></i> Delete
                     </button>
                 </form>
+                @endif
             </div>
         </div>
     </div>

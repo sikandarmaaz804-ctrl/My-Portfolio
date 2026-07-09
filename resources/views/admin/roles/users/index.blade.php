@@ -4,15 +4,21 @@
 
 @section('content')
 
+@php
+    use App\Helpers\PermissionHelper;
+@endphp
+
 <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
     <div>
         <h1>Role Users</h1>
         <p>{{ $users->count() }} sub-admin {{ Str::plural('account', $users->count()) }}. Each account has a role that controls its access.</p>
     </div>
     <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        @if(PermissionHelper::can('roles.view'))
         <a href="{{ route('admin.roles.index') }}" class="btn-ghost">
             <i class="bi bi-shield-fill"></i> Manage Roles
         </a>
+        @endif
         <a href="{{ route('admin.role-users.create') }}" class="btn-primary-custom">
             <i class="bi bi-person-plus-fill"></i> New User
         </a>

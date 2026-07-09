@@ -561,6 +561,21 @@
 </head>
 <body>
 
+@php
+    use App\Helpers\PermissionHelper;
+    $__isSuperAdmin  = PermissionHelper::isSuperAdmin();
+    $__authUserName  = PermissionHelper::getUserName();
+    $__authRoleName  = PermissionHelper::getRoleName();
+    $__authRoleColor = PermissionHelper::getRoleColor();
+    $__userInitial   = strtoupper(substr($__authUserName, 0, 1));
+
+    // For sub-admins, eager-load permissions once so hasPermission() is fast
+    if (!$__isSuperAdmin) {
+        $__roleUser = \Illuminate\Support\Facades\Auth::guard('role_user')->user();
+        $__roleUser?->loadMissing('role.permissions');
+    }
+@endphp
+
 <!-- ═══ SIDEBAR ═══════════════════════════════════════════════ -->
 <aside id="sidebar">
 
@@ -573,62 +588,96 @@
         </div>
     </a>
 
-    <!-- Main Navigation -->
+    <!-- ── Main ────────────────────────────────────── -->
     <div class="sidebar-section">
         <div class="sidebar-section-label">Main</div>
 
+        {{-- Dashboard: always visible --}}
         <a href="{{ route('admin.dashboard') }}"
            class="nav-link-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid-1x2-fill"></i> Dashboard
         </a>
     </div>
 
-    <!-- Content -->
+    <!-- ── Content ─────────────────────────────────── -->
+    @php
+        $showBlogsSection    = PermissionHelper::can('blogs.view')    || PermissionHelper::can('blogs.create');
+        $showProjectsSection = PermissionHelper::can('projects.view') || PermissionHelper::can('projects.create');
+        $showTeamSection     = PermissionHelper::can('team.view')     || PermissionHelper::can('team.create');
+        $showResumeLink      = PermissionHelper::can('resume.view');
+        $showContentSection  = $showBlogsSection || $showProjectsSection || $showTeamSection || $showResumeLink;
+    @endphp
+
+    @if($showContentSection)
     <div class="sidebar-section">
         <div class="sidebar-section-label">Content</div>
 
-        <a href="{{ route('admin.blogs') }}"
-           class="nav-link-item {{ request()->routeIs('admin.blogs') ? 'active' : '' }}">
-            <i class="bi bi-journal-richtext"></i> All Blogs
-        </a>
+        @if($showBlogsSection)
+            @if(PermissionHelper::can('blogs.view'))
+            <a href="{{ route('admin.blogs') }}"
+               class="nav-link-item {{ request()->routeIs('admin.blogs') ? 'active' : '' }}">
+                <i class="bi bi-journal-richtext"></i> All Blogs
+            </a>
+            @endif
 
-        <a href="{{ route('admin.blog') }}"
-           class="nav-link-item {{ request()->routeIs('admin.blog') ? 'active' : '' }}">
-            <i class="bi bi-plus-circle"></i> New Blog
-        </a>
+            @if(PermissionHelper::can('blogs.create'))
+            <a href="{{ route('admin.blog') }}"
+               class="nav-link-item {{ request()->routeIs('admin.blog') ? 'active' : '' }}">
+                <i class="bi bi-plus-circle"></i> New Blog
+            </a>
+            @endif
 
-        <a href="{{ route('admin.uploads') }}"
-           class="nav-link-item {{ request()->routeIs('admin.uploads') ? 'active' : '' }}">
-            <i class="bi bi-images"></i> Media Library
-        </a>
+            @if(PermissionHelper::can('blogs.view'))
+            <a href="{{ route('admin.uploads') }}"
+               class="nav-link-item {{ request()->routeIs('admin.uploads') ? 'active' : '' }}">
+                <i class="bi bi-images"></i> Media Library
+            </a>
+            @endif
+        @endif
 
-        <a href="{{ route('admin.projects.index') }}"
-           class="nav-link-item {{ request()->routeIs('admin.projects*') ? 'active' : '' }}">
-            <i class="bi bi-folder2-open"></i> Projects
-        </a>
+        @if($showProjectsSection)
+            @if(PermissionHelper::can('projects.view'))
+            <a href="{{ route('admin.projects.index') }}"
+               class="nav-link-item {{ request()->routeIs('admin.projects*') ? 'active' : '' }}">
+                <i class="bi bi-folder2-open"></i> Projects
+            </a>
+            @endif
 
-        <a href="{{ route('admin.projects.create') }}"
-           class="nav-link-item {{ request()->routeIs('admin.projects.create') ? 'active' : '' }}">
-            <i class="bi bi-folder-plus"></i> Add Project
-        </a>
+            @if(PermissionHelper::can('projects.create'))
+            <a href="{{ route('admin.projects.create') }}"
+               class="nav-link-item {{ request()->routeIs('admin.projects.create') ? 'active' : '' }}">
+                <i class="bi bi-folder-plus"></i> Add Project
+            </a>
+            @endif
+        @endif
 
-        <a href="{{ route('admin.team.index') }}"
-           class="nav-link-item {{ request()->routeIs('admin.team*') ? 'active' : '' }}">
-            <i class="bi bi-people-fill"></i> Team Members
-        </a>
+        @if($showTeamSection)
+            @if(PermissionHelper::can('team.view'))
+            <a href="{{ route('admin.team.index') }}"
+               class="nav-link-item {{ request()->routeIs('admin.team*') ? 'active' : '' }}">
+                <i class="bi bi-people-fill"></i> Team Members
+            </a>
+            @endif
 
-        <a href="{{ route('admin.team.create') }}"
-           class="nav-link-item {{ request()->routeIs('admin.team.create') ? 'active' : '' }}">
-            <i class="bi bi-person-plus-fill"></i> Add Member
-        </a>
+            @if(PermissionHelper::can('team.create'))
+            <a href="{{ route('admin.team.create') }}"
+               class="nav-link-item {{ request()->routeIs('admin.team.create') ? 'active' : '' }}">
+                <i class="bi bi-person-plus-fill"></i> Add Member
+            </a>
+            @endif
+        @endif
 
+        @if($showResumeLink)
         <a href="{{ route('admin.resume') }}"
            class="nav-link-item {{ request()->routeIs('admin.resume') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-person-fill"></i> Resume
         </a>
+        @endif
     </div>
+    @endif
 
-    <!-- Communications -->
+    <!-- ── Communications ──────────────────────────── -->
+    @if(PermissionHelper::can('contacts.view'))
     <div class="sidebar-section">
         <div class="sidebar-section-label">Communications</div>
 
@@ -641,34 +690,52 @@
             @endif
         </a>
     </div>
+    @endif
 
-    <!-- System -->
+    <!-- ── System ───────────────────────────────────── -->
+    @php
+        $showSystemLink = PermissionHelper::can('system.view');
+        $showRolesLink  = PermissionHelper::can('roles.view');
+        $showRoleUsersLink = PermissionHelper::can('roles.users');
+        $showSystemSection = $showSystemLink || $showRolesLink || $showRoleUsersLink;
+    @endphp
+
+    @if($showSystemSection)
     <div class="sidebar-section">
         <div class="sidebar-section-label">System</div>
 
+        @if($showSystemLink)
         <a href="{{ route('admin.system') }}"
            class="nav-link-item {{ request()->routeIs('admin.system') ? 'active' : '' }}">
             <i class="bi bi-gear-fill"></i> System Utilities
         </a>
+        @endif
 
+        @if($showRolesLink)
         <a href="{{ route('admin.roles.index') }}"
            class="nav-link-item {{ request()->routeIs('admin.roles*') ? 'active' : '' }}">
             <i class="bi bi-shield-lock-fill"></i> Roles & Permissions
         </a>
+        @endif
 
+        @if($showRoleUsersLink)
         <a href="{{ route('admin.role-users.index') }}"
            class="nav-link-item {{ request()->routeIs('admin.role-users*') ? 'active' : '' }}">
-            <i class="bi bi-people-fill"></i> Role Users
+            <i class="bi bi-person-badge-fill"></i> Role Users
         </a>
+        @endif
     </div>
+    @endif
 
-    <!-- Footer -->
+    <!-- ── Footer / User ───────────────────────────── -->
     <div class="sidebar-footer">
         <div class="sidebar-user">
-            <div class="avatar">M</div>
+            <div class="avatar" style="background: linear-gradient(135deg, {{ $__authRoleColor }}, {{ $__authRoleColor }}99);">
+                {{ $__userInitial }}
+            </div>
             <div class="user-info">
-                <div class="name">Maaz Sikandar</div>
-                <div class="role">Administrator</div>
+                <div class="name">{{ $__authUserName }}</div>
+                <div class="role">{{ $__authRoleName }}</div>
             </div>
         </div>
         <a href="{{ route('admin.logout') }}"
@@ -701,40 +768,71 @@
 
         <!-- Desktop Actions (hidden on mobile) -->
         <div class="topbar-actions-desktop">
-            <!-- Messages shortcut -->
+
+            @if(PermissionHelper::can('contacts.view'))
             <a href="{{ route('admin.messages') }}" class="topbar-btn" title="Messages">
                 <i class="bi bi-envelope"></i>
                 @if(\App\Models\Contact::count() > 0)
                     <span class="dot"></span>
                 @endif
             </a>
+            @endif
 
-            <!-- View site -->
             <a href="{{ route('home') }}" target="_blank" class="topbar-btn" title="View Site">
                 <i class="bi bi-box-arrow-up-right"></i>
             </a>
 
-            <!-- User -->
-            <a href="{{ route('admin.logout') }}"
-               class="topbar-user"
-               onclick="event.preventDefault(); confirmAction('Are you sure you want to logout?', '{{ route('admin.logout') }}');">
-                <div class="t-avatar">M</div>
-                <span class="t-name">Logout</span>
-                <i class="bi bi-box-arrow-right" style="font-size:13px;"></i>
-            </a>
+            <!-- User chip — shows name + role badge -->
+            <div style="display:flex; align-items:center; gap:8px; padding:5px 12px;
+                        background:var(--body-bg); border:1px solid var(--border);
+                        border-radius:10px; cursor:default;">
+                <div class="t-avatar" style="background: linear-gradient(135deg, {{ $__authRoleColor }}, {{ $__authRoleColor }}99);">
+                    {{ $__userInitial }}
+                </div>
+                <div style="line-height:1.2;">
+                    <div class="t-name">{{ $__authUserName }}</div>
+                    <div style="font-size:10px; font-weight:700; color:{{ $__authRoleColor }}; letter-spacing:0.3px;">
+                        {{ $__authRoleName }}
+                    </div>
+                </div>
+                <a href="{{ route('admin.logout') }}"
+                   class="topbar-btn"
+                   style="margin-left:4px; width:30px; height:30px; border:none; background:transparent;"
+                   title="Logout"
+                   onclick="event.preventDefault(); confirmAction('Are you sure you want to logout?', '{{ route('admin.logout') }}');">
+                    <i class="bi bi-box-arrow-right" style="font-size:14px;"></i>
+                </a>
+            </div>
         </div>
 
         <!-- Mobile Dropdown Menu -->
         <div class="topbar-actions-mobile">
             <button class="topbar-btn topbar-menu-toggle" onclick="toggleMobileMenu()" title="Menu">
                 <i class="bi bi-three-dots-vertical"></i>
-                @if(\App\Models\Contact::count() > 0)
+                @if(PermissionHelper::can('contacts.view') && \App\Models\Contact::count() > 0)
                     <span class="dot"></span>
                 @endif
             </button>
 
-            <!-- Dropdown -->
             <div class="topbar-mobile-dropdown" id="mobileDropdown">
+
+                <!-- User info row at top -->
+                <div style="padding:10px 14px 8px; border-bottom:1px solid var(--border); margin-bottom:4px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="
+                            width:34px; height:34px; border-radius:50%;
+                            background: linear-gradient(135deg, {{ $__authRoleColor }}, {{ $__authRoleColor }}99);
+                            display:flex; align-items:center; justify-content:center;
+                            color:#fff; font-weight:700; font-size:13px; flex-shrink:0;
+                        ">{{ $__userInitial }}</div>
+                        <div>
+                            <div style="font-weight:700; font-size:13px; color:var(--text-main);">{{ $__authUserName }}</div>
+                            <div style="font-size:11px; font-weight:700; color:{{ $__authRoleColor }};">{{ $__authRoleName }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                @if(PermissionHelper::can('contacts.view'))
                 <a href="{{ route('admin.messages') }}" class="mobile-menu-item">
                     <i class="bi bi-envelope"></i>
                     <span>Messages</span>
@@ -742,6 +840,8 @@
                         <span class="mobile-badge">{{ \App\Models\Contact::count() }}</span>
                     @endif
                 </a>
+                @endif
+
                 <a href="{{ route('home') }}" target="_blank" class="mobile-menu-item">
                     <i class="bi bi-box-arrow-up-right"></i>
                     <span>View Site</span>
@@ -762,6 +862,71 @@
 <!-- ═══ MAIN CONTENT ══════════════════════════════════════════ -->
 <main id="main-content">
     <div class="content-wrapper">
+
+        {{-- ── Role User Access Banner ───────────────────────────────── --}}
+        @if(!$__isSuperAdmin && isset($__roleUser))
+        @php
+            $__userPerms = $__roleUser->role?->permissions ?? collect();
+            $__permCount = $__userPerms->count();
+            $__modules   = $__userPerms->pluck('module')->unique()->values();
+        @endphp
+        <div style="
+            background: linear-gradient(135deg, {{ $__authRoleColor }}12, {{ $__authRoleColor }}06);
+            border: 1px solid {{ $__authRoleColor }}30;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        ">
+            <!-- Avatar -->
+            <div style="
+                width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+                background: linear-gradient(135deg, {{ $__authRoleColor }}, {{ $__authRoleColor }}99);
+                display: flex; align-items: center; justify-content: center;
+                color: #fff; font-weight: 700; font-size: 18px;
+            ">{{ $__userInitial }}</div>
+
+            <!-- Info -->
+            <div style="flex:1; min-width:180px;">
+                <div style="font-weight: 700; font-size: 15px; color: var(--text-main);">
+                    Welcome back, {{ $__authUserName }} 👋
+                </div>
+                <div style="font-size: 13px; color: var(--text-muted); margin-top:2px;">
+                    Logged in as
+                    <span style="
+                        font-weight: 700;
+                        color: {{ $__authRoleColor }};
+                        padding: 1px 8px;
+                        background: {{ $__authRoleColor }}18;
+                        border-radius: 20px;
+                    ">{{ $__authRoleName }}</span>
+                    &nbsp;·&nbsp;
+                    <strong style="color: var(--text-main);">{{ $__permCount }}</strong>
+                    {{ Str::plural('permission', $__permCount) }} across
+                    <strong style="color: var(--text-main);">{{ $__modules->count() }}</strong>
+                    {{ Str::plural('module', $__modules->count()) }}
+                </div>
+            </div>
+
+            <!-- Permission module tags -->
+            @if($__modules->count())
+            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                @foreach($__modules as $mod)
+                <span style="
+                    font-size: 11px; font-weight: 700;
+                    padding: 3px 10px; border-radius: 20px;
+                    background: {{ $__authRoleColor }}18;
+                    color: {{ $__authRoleColor }};
+                    text-transform: capitalize;
+                ">{{ \App\Models\Permission::allModules()[$mod] ?? ucfirst($mod) }}</span>
+                @endforeach
+            </div>
+            @endif
+        </div>
+        @endif
 
         @if(session('success'))
             <div class="alert-custom alert-success">

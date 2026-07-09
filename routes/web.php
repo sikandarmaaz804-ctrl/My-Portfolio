@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+use App\Helpers\PermissionHelper;
 use App\Models\Project;
 
 use App\Http\Controllers\ContactController;
@@ -149,6 +150,14 @@ Route::get('/admin/logout', [AuthController::class, 'logout'])->name('admin.logo
 */
 Route::middleware('admin.auth')->prefix('admin')->group(function () {
 
+    Route::get('/', function () {
+        return redirect()->route(PermissionHelper::firstAllowedAdminRoute());
+    })->name('admin.home');
+
+    Route::get('/no-access', function () {
+        return view('admin.no-access');
+    })->name('admin.no-access');
+
     // DASHBOARD
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
@@ -159,86 +168,141 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
     | PROJECTS (ADMIN FULL CRUD ✅)
     |--------------------------------------------------------------------------
     */
-    Route::resource('projects', AdminProjectController::class)
-        ->names('admin.projects');
+    Route::get('/projects', [AdminProjectController::class, 'index'])
+        ->name('admin.projects.index')->middleware('permission:projects.view');
+    Route::get('/projects/create', [AdminProjectController::class, 'create'])
+        ->name('admin.projects.create')->middleware('permission:projects.create');
+    Route::post('/projects', [AdminProjectController::class, 'store'])
+        ->name('admin.projects.store')->middleware('permission:projects.create');
+    Route::get('/projects/{project}/edit', [AdminProjectController::class, 'edit'])
+        ->name('admin.projects.edit')->middleware('permission:projects.edit');
+    Route::put('/projects/{project}', [AdminProjectController::class, 'update'])
+        ->name('admin.projects.update')->middleware('permission:projects.edit');
+    Route::delete('/projects/{project}', [AdminProjectController::class, 'destroy'])
+        ->name('admin.projects.destroy')->middleware('permission:projects.delete');
 
     /*
     |--------------------------------------------------------------------------
     | TEAM MEMBERS (ADMIN FULL CRUD ✅)
     |--------------------------------------------------------------------------
     */
-    Route::resource('team', AdminTeamController::class)
-        ->names('admin.team')
-        ->parameters(['team' => 'team'])
-        ->except(['show']);
+    Route::get('/team', [AdminTeamController::class, 'index'])
+        ->name('admin.team.index')->middleware('permission:team.view');
+    Route::get('/team/create', [AdminTeamController::class, 'create'])
+        ->name('admin.team.create')->middleware('permission:team.create');
+    Route::post('/team', [AdminTeamController::class, 'store'])
+        ->name('admin.team.store')->middleware('permission:team.create');
+    Route::get('/team/{team}/edit', [AdminTeamController::class, 'edit'])
+        ->name('admin.team.edit')->middleware('permission:team.edit');
+    Route::put('/team/{team}', [AdminTeamController::class, 'update'])
+        ->name('admin.team.update')->middleware('permission:team.edit');
+    Route::delete('/team/{team}', [AdminTeamController::class, 'destroy'])
+        ->name('admin.team.destroy')->middleware('permission:team.delete');
 
     /*
     |--------------------------------------------------------------------------
     | BLOG ADMIN
     |--------------------------------------------------------------------------
     */
-    Route::get('/blogs', [BlogController::class, 'adminIndex'])->name('admin.blogs');
+    Route::get('/blogs', [BlogController::class, 'adminIndex'])
+        ->name('admin.blogs')->middleware('permission:blogs.view');
 
     Route::get('/blog', function () {
         return view('admin.add-blog');
-    })->name('admin.blog');
+    })->name('admin.blog')->middleware('permission:blogs.create');
 
-    Route::post('/blog/store', [BlogController::class, 'store'])->name('admin.blog.store');
+    Route::post('/blog/store', [BlogController::class, 'store'])
+        ->name('admin.blog.store')->middleware('permission:blogs.create');
 
-    Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('admin.blog.delete');
+    Route::delete('/blog/{id}', [BlogController::class, 'destroy'])
+        ->name('admin.blog.delete')->middleware('permission:blogs.delete');
 
-    Route::get('/uploads', [BlogController::class, 'uploads'])->name('admin.uploads');
+    Route::get('/uploads', [BlogController::class, 'uploads'])
+        ->name('admin.uploads')->middleware('permission:blogs.view');
 
     /*
     |--------------------------------------------------------------------------
     | CONTACTS
     |--------------------------------------------------------------------------
     */
-    Route::get('/contacts', [AdminContactController::class, 'index'])->name('admin.contacts.index');
-    Route::get('/contacts/trash', [AdminContactController::class, 'trash'])->name('admin.contacts.trash');
+    Route::get('/contacts', [AdminContactController::class, 'index'])
+        ->name('admin.contacts.index')->middleware('permission:contacts.view');
+    Route::get('/contacts/trash', [AdminContactController::class, 'trash'])
+        ->name('admin.contacts.trash')->middleware('permission:contacts.view');
+    Route::get('/contacts/{id}', [AdminContactController::class, 'show'])
+        ->name('admin.contacts.show')->middleware('permission:contacts.view');
 
-    Route::get('/contacts/{id}', [AdminContactController::class, 'show'])->name('admin.contacts.show');
+    Route::post('/contacts/{id}/reply', [AdminContactController::class, 'reply'])
+        ->name('admin.contacts.reply')->middleware('permission:contacts.reply');
 
-    Route::post('/contacts/{id}/reply', [AdminContactController::class, 'reply'])->name('admin.contacts.reply');
+    Route::delete('/contacts/{id}', [AdminContactController::class, 'destroy'])
+        ->name('admin.contacts.destroy')->middleware('permission:contacts.delete');
+    Route::delete('/contacts-delete-all', [AdminContactController::class, 'deleteAll'])
+        ->name('admin.contacts.deleteAll')->middleware('permission:contacts.delete');
 
-    // Delete (soft)
-    Route::delete('/contacts/{id}', [AdminContactController::class, 'destroy'])->name('admin.contacts.destroy');
-    Route::delete('/contacts-delete-all', [AdminContactController::class, 'deleteAll'])->name('admin.contacts.deleteAll');
+    Route::post('/contacts/{id}/restore', [AdminContactController::class, 'restore'])
+        ->name('admin.contacts.restore')->middleware('permission:contacts.restore');
+    Route::post('/contacts-restore-all', [AdminContactController::class, 'restoreAll'])
+        ->name('admin.contacts.restoreAll')->middleware('permission:contacts.restore');
+    Route::delete('/contacts/{id}/force-delete', [AdminContactController::class, 'forceDelete'])
+        ->name('admin.contacts.forceDelete')->middleware('permission:contacts.delete');
 
-    // Trash actions
-    Route::post('/contacts/{id}/restore', [AdminContactController::class, 'restore'])->name('admin.contacts.restore');
-    Route::post('/contacts-restore-all', [AdminContactController::class, 'restoreAll'])->name('admin.contacts.restoreAll');
-    Route::delete('/contacts/{id}/force-delete', [AdminContactController::class, 'forceDelete'])->name('admin.contacts.forceDelete');
-
-    Route::get('/messages', [AdminContactController::class, 'index'])->name('admin.messages');
+    Route::get('/messages', [AdminContactController::class, 'index'])
+        ->name('admin.messages')->middleware('permission:contacts.view');
 
     // System Utilities
-    Route::get('/system', [AdminController::class, 'system'])->name('admin.system');
-    Route::post('/system/run-command', [AdminController::class, 'runCommand'])->name('admin.system.run_command');
+    Route::get('/system', [AdminController::class, 'system'])
+        ->name('admin.system')->middleware('permission:system.view');
+    Route::post('/system/run-command', [AdminController::class, 'runCommand'])
+        ->name('admin.system.run_command')->middleware('permission:system.run');
 
     // Resume
-    Route::get('/resume', [AdminController::class, 'resumeForm'])->name('admin.resume');
-    Route::post('/resume', [AdminController::class, 'uploadResume'])->name('admin.resume.upload');
-    Route::delete('/resume', [AdminController::class, 'deleteResume'])->name('admin.resume.delete');
+    Route::get('/resume', [AdminController::class, 'resumeForm'])
+        ->name('admin.resume')->middleware('permission:resume.view');
+    Route::post('/resume', [AdminController::class, 'uploadResume'])
+        ->name('admin.resume.upload')->middleware('permission:resume.upload');
+    Route::delete('/resume', [AdminController::class, 'deleteResume'])
+        ->name('admin.resume.delete')->middleware('permission:resume.delete');
 
     /*
     |--------------------------------------------------------------------------
     | ROLES & PERMISSIONS (main admin only)
     |--------------------------------------------------------------------------
     */
-    Route::resource('roles', RoleController::class)
-        ->names('admin.roles')
-        ->except(['show']);
+    Route::get('/roles', [RoleController::class, 'index'])
+        ->name('admin.roles.index')->middleware('permission:roles.view');
+    Route::get('/roles/create', [RoleController::class, 'create'])
+        ->name('admin.roles.create')->middleware('permission:roles.create');
+    Route::post('/roles', [RoleController::class, 'store'])
+        ->name('admin.roles.store')->middleware('permission:roles.create');
+    Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])
+        ->name('admin.roles.edit')->middleware('permission:roles.edit');
+    Route::put('/roles/{role}', [RoleController::class, 'update'])
+        ->name('admin.roles.update')->middleware('permission:roles.edit');
+    Route::patch('/roles/{role}', [RoleController::class, 'update'])
+        ->name('admin.roles.update.patch')->middleware('permission:roles.edit');
+    Route::delete('/roles/{role}', [RoleController::class, 'destroy'])
+        ->name('admin.roles.destroy')->middleware('permission:roles.delete');
 
     Route::post('/roles/seed-permissions', [RoleController::class, 'seedPermissions'])
-        ->name('admin.roles.seed');
+        ->name('admin.roles.seed')->middleware('permission:roles.create');
 
     // Sub-admin (role user) management
-    Route::resource('role-users', RoleUserController::class)
-        ->names('admin.role-users')
-        ->parameters(['role-users' => 'roleUser'])
-        ->except(['show']);
+    Route::get('/role-users', [RoleUserController::class, 'index'])
+        ->name('admin.role-users.index')->middleware('permission:roles.users');
+    Route::get('/role-users/create', [RoleUserController::class, 'create'])
+        ->name('admin.role-users.create')->middleware('permission:roles.users');
+    Route::post('/role-users', [RoleUserController::class, 'store'])
+        ->name('admin.role-users.store')->middleware('permission:roles.users');
+    Route::get('/role-users/{roleUser}/edit', [RoleUserController::class, 'edit'])
+        ->name('admin.role-users.edit')->middleware('permission:roles.users');
+    Route::put('/role-users/{roleUser}', [RoleUserController::class, 'update'])
+        ->name('admin.role-users.update')->middleware('permission:roles.users');
+    Route::patch('/role-users/{roleUser}', [RoleUserController::class, 'update'])
+        ->name('admin.role-users.update.patch')->middleware('permission:roles.users');
+    Route::delete('/role-users/{roleUser}', [RoleUserController::class, 'destroy'])
+        ->name('admin.role-users.destroy')->middleware('permission:roles.users');
 
     Route::post('/role-users/{roleUser}/toggle-status', [RoleUserController::class, 'toggleStatus'])
-        ->name('admin.role-users.toggle');
+        ->name('admin.role-users.toggle')->middleware('permission:roles.users');
 });

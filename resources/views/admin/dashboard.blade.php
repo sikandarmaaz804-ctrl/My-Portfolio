@@ -5,6 +5,9 @@
 @section('content')
 
 @php
+    use App\Helpers\PermissionHelper;
+    $isSuperAdmin = PermissionHelper::isSuperAdmin();
+
     $blogCount    = \App\Models\Blog::count();
     $messageCount = \App\Models\Contact::count();
     $projectCount = \App\Models\Project::count();
@@ -13,17 +16,99 @@
     $recentBlogs    = \App\Models\Blog::latest()->take(5)->get();
     $recentMessages = \App\Models\Contact::latest()->take(5)->get();
     $recentProjects = \App\Models\Project::latest()->take(4)->get();
+
+    // Welcome name — super admin keeps original greeting, sub-admin shows their name
+    $welcomeName = $isSuperAdmin ? 'Maaz' : PermissionHelper::getUserName();
+
+    $roleUser = auth('role_user')->user();
+    $moduleLabels = \App\Models\Permission::allModules();
+    $rolePermissions = $roleUser?->role?->permissions ?? collect();
+    $roleModules = $rolePermissions->pluck('module')->unique()->values();
+    $hasDashboardContent = PermissionHelper::can('blogs.view')
+        || PermissionHelper::can('contacts.view')
+        || PermissionHelper::can('projects.view')
+        || PermissionHelper::can('blogs.create')
+        || PermissionHelper::can('projects.create');
+
+    $quickLinks = [
+        ['permission' => 'blogs.view', 'route' => 'admin.blogs', 'icon' => 'bi-journal-text', 'label' => 'Blogs'],
+        ['permission' => 'blogs.create', 'route' => 'admin.blog', 'icon' => 'bi-plus-circle', 'label' => 'New Blog'],
+        ['permission' => 'projects.view', 'route' => 'admin.projects.index', 'icon' => 'bi-folder2-open', 'label' => 'Projects'],
+        ['permission' => 'projects.create', 'route' => 'admin.projects.create', 'icon' => 'bi-folder-plus', 'label' => 'New Project'],
+        ['permission' => 'team.view', 'route' => 'admin.team.index', 'icon' => 'bi-people', 'label' => 'Team'],
+        ['permission' => 'team.create', 'route' => 'admin.team.create', 'icon' => 'bi-person-plus', 'label' => 'Add Member'],
+        ['permission' => 'contacts.view', 'route' => 'admin.contacts.index', 'icon' => 'bi-envelope', 'label' => 'Messages'],
+        ['permission' => 'resume.view', 'route' => 'admin.resume', 'icon' => 'bi-file-earmark-person', 'label' => 'Resume'],
+    ];
 @endphp
 
 <!-- Page Header -->
 <div class="page-header">
-    <h1>Welcome back, Maaz 👋</h1>
+    <h1>Welcome back, {{ $welcomeName }} 👋</h1>
     <p>Here's what's happening across your site today.</p>
 </div>
+
+@if(!$isSuperAdmin)
+<div class="admin-card mb-4">
+    <div class="card-head">
+        <h5><i class="bi bi-stars me-2" style="color:var(--accent);"></i>Your Workspace</h5>
+    </div>
+    <div class="card-body-p">
+        <div class="row g-3 align-items-stretch">
+            <div class="col-lg-5">
+                <div style="height:100%; padding:18px; border:1px solid var(--border); border-radius:14px; background:#f8fafc;">
+                    <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px;">
+                        Role Access
+                    </div>
+                    <div style="font-size:28px; font-weight:800; line-height:1; color:var(--text-main);">
+                        {{ $rolePermissions->count() }}
+                    </div>
+                    <div style="font-size:13px; color:var(--text-muted); margin-top:6px;">
+                        assigned {{ \Illuminate\Support\Str::plural('permission', $rolePermissions->count()) }}
+                        across {{ $roleModules->count() }} {{ \Illuminate\Support\Str::plural('section', $roleModules->count()) }}
+                    </div>
+
+                    @if($roleModules->count())
+                    <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:16px;">
+                        @foreach($roleModules as $module)
+                        <span style="font-size:12px; font-weight:700; color:var(--accent); background:rgba(99,102,241,.10); border-radius:20px; padding:5px 10px;">
+                            {{ $moduleLabels[$module] ?? ucfirst($module) }}
+                        </span>
+                        @endforeach
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div style="height:100%; padding:18px; border:1px solid var(--border); border-radius:14px;">
+                    <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:12px;">
+                        Available Shortcuts
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                        @foreach($quickLinks as $link)
+                            @if(PermissionHelper::can($link['permission']))
+                            <a href="{{ route($link['route']) }}" class="btn-ghost">
+                                <i class="bi {{ $link['icon'] }}"></i> {{ $link['label'] }}
+                            </a>
+                            @endif
+                        @endforeach
+
+                        @if($rolePermissions->isEmpty())
+                        <span style="color:var(--text-muted); font-size:14px;">No shortcuts are available yet.</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- ── STAT CARDS ─────────────────────────────────────────── -->
 <div class="row g-3 mb-4">
 
+    @if(PermissionHelper::can('blogs.view'))
     <div class="col-sm-6 col-xl-3">
         <div class="stat-card">
             <div class="stat-icon purple"><i class="bi bi-journal-richtext"></i></div>
@@ -33,7 +118,9 @@
             </div>
         </div>
     </div>
+    @endif
 
+    @if(PermissionHelper::can('contacts.view'))
     <div class="col-sm-6 col-xl-3">
         <div class="stat-card">
             <div class="stat-icon green"><i class="bi bi-envelope-fill"></i></div>
@@ -43,7 +130,9 @@
             </div>
         </div>
     </div>
+    @endif
 
+    @if(PermissionHelper::can('projects.view'))
     <div class="col-sm-6 col-xl-3">
         <div class="stat-card">
             <div class="stat-icon blue"><i class="bi bi-folder2-open"></i></div>
@@ -53,7 +142,9 @@
             </div>
         </div>
     </div>
+    @endif
 
+    @if(PermissionHelper::can('blogs.view'))
     <div class="col-sm-6 col-xl-3">
         <div class="stat-card">
             <div class="stat-icon orange"><i class="bi bi-chat-dots-fill"></i></div>
@@ -63,12 +154,14 @@
             </div>
         </div>
     </div>
+    @endif
 
 </div>
 
 <!-- ── MAIN GRID ───────────────────────────────────────────── -->
 <div class="row g-3 mb-4">
 
+    @if(PermissionHelper::can('blogs.view'))
     <!-- Recent Blogs -->
     <div class="col-lg-7">
         <div class="admin-card h-100">
@@ -92,9 +185,11 @@
                             {{ $blog->created_at->diffForHumans() }}
                         </div>
                     </div>
+                    @if(PermissionHelper::can('blogs.delete'))
                     <a href="{{ route('admin.blog.delete', $blog->id) }}" style="color:var(--text-muted); font-size:16px; text-decoration:none;">
                         <i class="bi bi-pencil-square"></i>
                     </a>
+                    @endif
                 </div>
                 @empty
                 <div style="padding:32px; text-align:center; color:var(--text-muted);">
@@ -105,9 +200,11 @@
             </div>
         </div>
     </div>
+    @endif
 
+    @if(PermissionHelper::can('contacts.view'))
     <!-- Recent Messages -->
-    <div class="col-lg-5">
+    <div class="{{ PermissionHelper::can('blogs.view') ? 'col-lg-5' : 'col-lg-12' }}">
         <div class="admin-card h-100">
             <div class="card-head">
                 <h5><i class="bi bi-envelope me-2" style="color:var(--success);"></i>Recent Messages</h5>
@@ -142,6 +239,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 </div>
 
@@ -155,19 +253,35 @@
                 <h5><i class="bi bi-lightning-fill me-2" style="color:var(--warning);"></i>Quick Actions</h5>
             </div>
             <div class="card-body-p">
+                @if(PermissionHelper::can('blogs.create'))
                 <a href="{{ route('admin.blog') }}" class="btn-primary-custom w-100 mb-3 justify-content-center">
                     <i class="bi bi-plus-lg"></i> New Blog Post
                 </a>
+                @endif
+
+                @if(PermissionHelper::can('projects.create'))
                 <a href="{{ route('admin.projects.create') }}" class="btn-ghost w-100 mb-3 justify-content-center">
                     <i class="bi bi-folder-plus"></i> Add Project
                 </a>
-                <a href="{{ route('admin.messages') }}" class="btn-ghost w-100 justify-content-center">
+                @endif
+
+                @if(PermissionHelper::can('contacts.view'))
+                <a href="{{ route('admin.messages') }}" class="btn-ghost w-100 mb-3 justify-content-center">
                     <i class="bi bi-envelope"></i> Check Messages
                 </a>
+                @endif
+
+                @if(!PermissionHelper::can('blogs.create') && !PermissionHelper::can('projects.create') && !PermissionHelper::can('contacts.view'))
+                <div style="text-align:center; padding:20px; color:var(--text-muted);">
+                    <i class="bi bi-lock" style="font-size:28px; opacity:0.3;"></i>
+                    <p style="margin-top:8px; font-size:13px;">No quick actions available for your role.</p>
+                </div>
+                @endif
             </div>
         </div>
     </div>
 
+    @if(PermissionHelper::can('projects.view'))
     <!-- Recent Projects -->
     <div class="col-lg-8">
         <div class="admin-card">
@@ -205,7 +319,20 @@
             </div>
         </div>
     </div>
+    @endif
 
 </div>
+
+@if(!$isSuperAdmin && !$hasDashboardContent)
+<div class="admin-card">
+    <div class="card-body-p" style="text-align:center; padding:34px;">
+        <i class="bi bi-shield-lock" style="font-size:42px; color:var(--accent); opacity:.75;"></i>
+        <h5 style="margin:14px 0 6px; font-weight:800;">Dashboard access is limited</h5>
+        <p style="margin:0; color:var(--text-muted); font-size:14px;">
+            Your role is active. Ask the main administrator to add view or create permissions for dashboard cards and shortcuts.
+        </p>
+    </div>
+</div>
+@endif
 
 @endsection

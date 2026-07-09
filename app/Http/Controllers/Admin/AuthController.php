@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\PermissionHelper;
 use App\Http\Controllers\Controller;
-use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +20,7 @@ class AuthController extends Controller
 
         // Try main admin guard first
         if (Auth::guard('admin')->attempt($credentials)) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route(PermissionHelper::firstAllowedAdminRoute());
         }
 
         // Try role_user guard (sub-admins)
@@ -35,7 +35,7 @@ class AuthController extends Controller
             // Track last login
             $user->update(['last_login_at' => now()]);
 
-            return redirect()->route('admin.dashboard');
+            return redirect()->route(PermissionHelper::firstAllowedAdminRoute());
         }
 
         return back()->with('error', 'Invalid credentials');
