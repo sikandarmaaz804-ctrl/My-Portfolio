@@ -337,12 +337,201 @@
     box-shadow: 0 8px 20px rgba(118,109,255,.4);
 }
 
+/* ══ PUBLIC NOTICE MODAL ══════════════════════════════════════ */
+.notice-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,14,35,.80);
+    backdrop-filter: blur(7px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.notice-overlay.hidden { display: none; }
+.notice-box {
+    background: #fff;
+    border-radius: 24px;
+    max-width: 560px;
+    width: 100%;
+    padding: 48px 44px 40px;
+    box-shadow: 0 28px 72px rgba(0,0,0,.28);
+    text-align: center;
+    position: relative;
+    animation: noticeIn .38s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes noticeIn {
+    from { opacity: 0; transform: scale(.85) translateY(36px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.notice-icon {
+    width: 76px; height: 76px;
+    background: linear-gradient(135deg, rgba(239,68,68,.14), rgba(251,146,60,.12));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    border: 2px solid rgba(239,68,68,.18);
+}
+.notice-icon i { font-size: 32px; color: #ef4444; }
+.notice-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 5px 16px;
+    margin-bottom: 16px;
+}
+.notice-box h4 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 16px;
+    font-family: 'Heebo', sans-serif;
+    letter-spacing: .3px;
+}
+.notice-box p {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #4b5563;
+    margin: 0 0 30px;
+    text-align: left;
+}
+.btn-notice-ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 52px;
+    background: linear-gradient(135deg, #766dff 0%, #88f3ff 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .3s;
+    box-shadow: 0 8px 24px rgba(118,109,255,.38);
+    font-family: 'Roboto', sans-serif;
+}
+.btn-notice-ok:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(118,109,255,.55);
+}
+
+/* ══ DISABLED FORM ════════════════════════════════════════════ */
+.form-disabled-wrap {
+    position: relative;
+    pointer-events: none;
+    user-select: none;
+}
+.form-disabled-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(249,250,251,.62);
+    border-radius: 20px;
+    z-index: 10;
+    cursor: not-allowed;
+}
+.form-card .form-control:disabled {
+    background: #f3f4f6 !important;
+    color: #9ca3af !important;
+    cursor: not-allowed;
+    border-color: #e5e7eb !important;
+}
+.btn-send:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    background: #d1d5db !important;
+}
+
+/* ══ WHATSAPP CTA BANNER ══════════════════════════════════════ */
+.wa-cta {
+    background: linear-gradient(135deg, #075e54 0%, #128c7e 60%, #25d366 100%);
+    border-radius: 22px;
+    padding: 38px 44px;
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    box-shadow: 0 16px 48px rgba(37,211,102,.28);
+    position: relative;
+    overflow: hidden;
+}
+.wa-cta::before {
+    content: '';
+    position: absolute;
+    width: 260px; height: 260px;
+    background: rgba(255,255,255,.05);
+    border-radius: 50%;
+    top: -80px; right: -60px;
+    pointer-events: none;
+}
+.wa-cta-text { flex: 1; min-width: 200px; }
+.wa-cta-text .wa-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.75);
+    display: block;
+    margin-bottom: 8px;
+}
+.wa-cta-text h4 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 6px;
+    font-family: 'Heebo', sans-serif;
+    line-height: 1.3;
+}
+.wa-cta-text p {
+    font-size: 13px;
+    color: rgba(255,255,255,.78);
+    margin: 0;
+    line-height: 1.65;
+}
+.btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 34px;
+    background: #fff;
+    color: #075e54;
+    border: none;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .3s;
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.btn-whatsapp i { font-size: 20px; color: #25d366; }
+.btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(0,0,0,.26);
+    color: #075e54;
+    background: #f0fdf4;
+}
+
 /* ══ RESPONSIVE ═══════════════════════════════════════════════ */
 @media (max-width: 991px) {
     .contact_banner .banner_inner { min-height: 420px; }
     .contact_banner { min-height: 420px; }
     .contact_banner .banner_text h2 { font-size: 38px; }
     .form-card { padding: 36px 28px; }
+    .wa-cta { padding: 30px 28px; }
 }
 @media (max-width: 767px) {
     .contact_banner .banner_inner { min-height: 360px; }
@@ -352,6 +541,8 @@
     .map-wrap iframe { height: 280px; }
     .form-card { padding: 28px 20px; }
     .social-strip { padding: 30px 24px; }
+    .wa-cta { flex-direction: column; text-align: center; }
+    .btn-whatsapp { width: 100%; justify-content: center; }
 }
 @media (max-width: 575px) {
     .contact_banner .banner_text h2 { font-size: 24px; }
@@ -359,6 +550,7 @@
     .btn-send { width: 100%; justify-content: center; }
     .social-strip { flex-direction: column; text-align: center; }
     .social-strip .strip-icons { justify-content: center; }
+    .notice-box { padding: 36px 24px 30px; }
 }
 </style>
 
@@ -440,66 +632,15 @@
         {{-- CONTACT FORM --}}
         <div class="row justify-content-center">
             <div class="col-lg-9">
-                <div class="form-card">
+
+                {{-- FORM CARD — permanently disabled --}}
+                <div class="form-card form-disabled-wrap" id="formCardWrap">
 
                     <div class="section-head">
                         <span class="eyebrow">✦ Send a Message</span>
                         <h3>Drop Me a Line</h3>
-                        <p>Whether you have a project in mind, a question, or just want to connect — I'm all ears. Complete the form and I'll reply within 24 hours.</p>
+                        <p>The contact form is currently disabled. If you are a real user and need our services, please reach out to us directly via WhatsApp using the button below.</p>
                     </div>
-
-                    {{-- SUCCESS ALERT (Centered & Well-Designed) --}}
-                    @if(session('success'))
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Message Sent!',
-                                html: '<p style="font-size: 16px; color: #666; margin: 10px 0;">{{ session('success') }}</p>',
-                                showConfirmButton: true,
-                                confirmButtonText: 'Great!',
-                                confirmButtonColor: '#766dff',
-                                allowOutsideClick: false,
-                                backdrop: 'rgba(0,0,0,0.4)',
-                                customClass: {
-                                    container: 'swal-custom-container',
-                                    popup: 'swal-custom-popup',
-                                    title: 'swal-custom-title',
-                                    confirmButton: 'swal-custom-button'
-                                }
-                            });
-                        });
-                    </script>
-                    <style>
-                        .swal-custom-popup {
-                            border-radius: 20px !important;
-                            box-shadow: 0 10px 40px rgba(118, 109, 255, 0.2) !important;
-                            border: 2px solid #766dff !important;
-                            background: linear-gradient(135deg, #ffffff 0%, #f8f7ff 100%) !important;
-                        }
-                        .swal-custom-title {
-                            font-size: 28px !important;
-                            font-weight: 800 !important;
-                            color: #766dff !important;
-                            margin-bottom: 15px !important;
-                        }
-                        .swal-custom-button {
-                            background: linear-gradient(135deg, #766dff, #818cf8) !important;
-                            border: none !important;
-                            border-radius: 10px !important;
-                            padding: 12px 40px !important;
-                            font-weight: 700 !important;
-                            font-size: 15px !important;
-                            box-shadow: 0 5px 15px rgba(118, 109, 255, 0.3) !important;
-                            transition: all 0.3s ease !important;
-                        }
-                        .swal-custom-button:hover {
-                            transform: translateY(-2px) !important;
-                            box-shadow: 0 8px 20px rgba(118, 109, 255, 0.4) !important;
-                        }
-                    </style>
-                    @endif
 
                     <form action="{{ route('contact.store') }}" method="POST" id="contactForm">
                         @csrf
@@ -513,8 +654,7 @@
                                            name="name"
                                            class="form-control"
                                            placeholder="e.g. John Doe"
-                                           value="{{ old('name') }}"
-                                           required>
+                                           disabled>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -525,8 +665,7 @@
                                            name="email"
                                            class="form-control"
                                            placeholder="e.g. john@example.com"
-                                           value="{{ old('email') }}"
-                                           required>
+                                           disabled>
                                 </div>
                             </div>
                         </div>
@@ -538,8 +677,7 @@
                                    name="phone"
                                    class="form-control"
                                    placeholder="e.g. +1 (555) 123-4567"
-                                   value="{{ old('phone') }}"
-                                   required>
+                                   disabled>
                         </div>
 
                         <div class="form-group">
@@ -549,8 +687,7 @@
                                    name="subject"
                                    class="form-control"
                                    placeholder="What's this about?"
-                                   value="{{ old('subject') }}"
-                                   required>
+                                   disabled>
                         </div>
 
                         <div class="form-group">
@@ -559,21 +696,34 @@
                                       name="message"
                                       class="form-control"
                                       placeholder="Write your message here..."
-                                      required>{{ old('message') }}</textarea>
+                                      disabled></textarea>
                         </div>
 
                         <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mt-2">
                             <p style="font-size:12px; color:#9ca3af; margin:0;">
-                                <i class="fa fa-lock" style="margin-right:5px; color:#766dff;"></i>
-                                Your information is safe and will never be shared.
+                                <i class="fa fa-ban" style="margin-right:5px; color:#ef4444;"></i>
+                                This form is currently disabled.
                             </p>
-                            <button type="submit" class="btn-send">
+                            <button type="button" class="btn-send" disabled>
                                 <i class="fa fa-paper-plane"></i>
                                 Send Message
                             </button>
                         </div>
 
                     </form>
+                </div>
+
+                {{-- WHATSAPP CTA --}}
+                <div class="wa-cta">
+                    <div class="wa-cta-text">
+                        <span class="wa-label">✦ Real Users — Contact Us Here</span>
+                        <h4>Need Our Services? Chat on WhatsApp</h4>
+                        <p>The contact form is temporarily disabled. If you are a genuine user interested in our services, please tap the button and message us directly on WhatsApp — we'll get back to you right away.</p>
+                    </div>
+                    <a href="https://wa.me/923015878068" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" aria-label="Chat on WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        Chat on WhatsApp
+                    </a>
                 </div>
 
                 {{-- SOCIAL STRIP --}}
@@ -603,5 +753,26 @@
 
     </div>
 </section>
+
+{{-- ══════════════════════════════════════════════════════════════
+     PUBLIC NOTICE MODAL
+══════════════════════════════════════════════════════════════ --}}
+<div class="notice-overlay" id="noticeOverlay" role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
+    <div class="notice-box">
+        <div class="notice-icon">
+            <i class="fa fa-triangle-exclamation"></i>
+        </div>
+        <span class="notice-badge">⚠ Public Notice</span>
+        <h4 id="noticeTitle">Public Notice</h4>
+        <p>
+            An individual is sending harassing content using fake names, email addresses, and phone numbers.<br><br>
+            The sender is being traced through their <strong>IP address</strong> by cybercrime experts, and an <strong>FIR has already been registered</strong>. Legal action is in progress, and the individual will be dealt with according to the law.<br><br>
+            Please do not believe or share any false information.
+        </p>
+        <button class="btn-notice-ok" id="noticeOkBtn" onclick="document.getElementById('noticeOverlay').classList.add('hidden')">
+            <i class="fa fa-check"></i> I Understand
+        </button>
+    </div>
+</div>
 
 @endsection
