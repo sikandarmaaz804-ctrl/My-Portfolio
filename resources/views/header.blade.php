@@ -37,32 +37,29 @@
 
     <style>
     /* ============================================
-       NAVBAR — Light & Smooth Redesign
+       NAVBAR — Fast, Light, No-Flicker
        ============================================ */
 
-    /* Base state: light background */
     .header_area {
         position: fixed !important;
         top: 0;
         left: 0;
         width: 100%;
         z-index: 999;
-        transition: background 0.3s ease, box-shadow 0.3s ease;
+        transition: box-shadow 0.25s ease;
     }
 
     .header_area .main_menu {
-        background: rgba(255, 255, 255, 0.95);
+        background: #fff;
     }
 
     .header_area .navbar {
         padding: 0 !important;
     }
 
-    /* Scrolled state — light with subtle shadow */
+    /* Scrolled state */
     .header_area.navbar_fixed .main_menu {
-        background: rgba(255, 255, 255, 0.98) !important;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: #fff !important;
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
     }
 
@@ -74,7 +71,6 @@
         text-decoration: none !important;
         line-height: 1;
         padding: 6px 0;
-        position: relative;
     }
 
     .nav-logo .logo-bracket {
@@ -86,7 +82,6 @@
         background-clip: text;
         font-family: 'Courier New', monospace;
         line-height: 1;
-        transition: filter 0.3s ease;
     }
 
     .nav-logo .logo-name {
@@ -99,7 +94,6 @@
         font-family: 'Segoe UI', system-ui, sans-serif;
         letter-spacing: -0.5px;
         line-height: 1;
-        transition: filter 0.3s ease;
     }
 
     .nav-logo .logo-dot {
@@ -113,32 +107,22 @@
         margin-left: 1px;
     }
 
-    /* Glow on hover */
-    .nav-logo:hover .logo-name { filter: brightness(0.85); }
-    .nav-logo:hover .logo-bracket { filter: brightness(1.2); }
-
-    /* ---- Nav links ---- */
+    /* ---- Nav links (desktop) ---- */
     .header_area .navbar .nav .nav-item .nav-link {
         font-size: 0.82rem !important;
         font-weight: 700 !important;
         letter-spacing: 0.8px !important;
         text-transform: uppercase;
-        color: #555555 !important;
+        color: #555 !important;
         position: relative;
         padding: 0 !important;
         line-height: 80px !important;
-        transition: color 0.3s ease !important;
+        transition: color 0.2s ease !important;
     }
 
-    /* Mobile: Dark text on light */
-    @media (max-width: 991px) {
-        .header_area .navbar .nav .nav-item .nav-link {
-            color: #555555 !important;
-        }
-    }
     .header_area .navbar .nav .nav-item .nav-link::after {
-        content: '' !important;
-        display: block !important;
+        content: '';
+        display: block;
         position: absolute;
         bottom: 18px;
         left: 0;
@@ -146,29 +130,23 @@
         height: 2px;
         background: linear-gradient(90deg, #667eea, #764ba2);
         border-radius: 2px;
-        transition: width 0.3s ease !important;
+        transition: width 0.2s ease !important;
     }
 
-    /* Active link styling */
-    .header_area .navbar .nav .nav-item.active .nav-link,
-    .header_area .navbar .nav .nav-item.active .nav-link:hover {
+    .header_area .navbar .nav .nav-item.active .nav-link {
         color: #667eea !important;
     }
-
     .header_area .navbar .nav .nav-item.active .nav-link::after {
         width: 100%;
     }
 
-    /* Hover (only if NOT active) */
     .header_area .navbar .nav .nav-item:not(.active):hover .nav-link {
         color: #667eea !important;
     }
-
     .header_area .navbar .nav .nav-item:not(.active):hover .nav-link::after {
         width: 100%;
     }
 
-    /* Scrolled link height */
     .header_area.navbar_fixed .main_menu .navbar .nav .nav-item .nav-link {
         line-height: 70px !important;
     }
@@ -176,7 +154,7 @@
         bottom: 14px;
     }
 
-    /* ---- Hire Me — Modern gradient button ---- */
+    /* ---- Hire Me button ---- */
     .header_area .navbar .nav .nav-item.hire-me-item {
         display: flex;
         align-items: center;
@@ -194,45 +172,34 @@
         font-weight: 700 !important;
         letter-spacing: 1px !important;
         text-transform: uppercase;
-        color: #ffffff !important;
+        color: #fff !important;
         background: linear-gradient(135deg, #667eea, #764ba2);
-        position: relative;
-        overflow: visible;
-        transition: all 0.3s ease !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
         white-space: nowrap;
-        box-sizing: border-box;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
-    /* Arrow icon */
     .header_area .navbar .nav .nav-item.hire-me-item .nav-link::before {
         content: '↗';
         font-size: 0.82rem;
-        display: inline-block;
-        transition: transform 0.3s ease;
         line-height: 1;
-        flex-shrink: 0;
     }
-    /* Kill the underline pseudo-element */
     .header_area .navbar .nav .nav-item.hire-me-item .nav-link::after {
         display: none !important;
     }
     .header_area .navbar .nav .nav-item.hire-me-item .nav-link:hover {
-        background: linear-gradient(135deg, #764ba2, #667eea) !important;
         transform: translateY(-2px);
         box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4) !important;
     }
-    .header_area .navbar .nav .nav-item.hire-me-item .nav-link:hover::before {
-        transform: translate(2px, -2px);
-    }
 
-    /* Dark toggler for mobile */
+    /* ============================================
+       MOBILE TOGGLER — Pure CSS, no flicker
+       ============================================ */
     .navbar-toggler {
-        border: none !important;
+        border: 1.5px solid rgba(102, 126, 234, 0.3) !important;
         outline: none !important;
         box-shadow: none !important;
         padding: 6px !important;
-        background: rgba(102, 126, 234, 0.1) !important;
-        border: 1.5px solid rgba(102, 126, 234, 0.25) !important;
+        background: rgba(102, 126, 234, 0.08) !important;
         border-radius: 8px !important;
         width: 42px;
         height: 42px;
@@ -242,47 +209,69 @@
         align-items: center;
         gap: 5px;
         cursor: pointer;
-        transition: background 0.3s ease, border-color 0.3s ease;
     }
-    
-    /* Mobile: Light toggler styles */
-    @media (max-width: 991px) {
-        .navbar-toggler {
-            background: rgba(102, 126, 234, 0.08) !important;
-            border: 1.5px solid rgba(102, 126, 234, 0.2) !important;
-        }
-        .navbar-toggler .icon-bar {
-            background: #667eea;
-        }
-        .navbar-toggler:hover,
-        .navbar-toggler:focus {
-            background: rgba(102, 126, 234, 0.15) !important;
-            border-color: rgba(102, 126, 234, 0.35) !important;
-        }
+    .navbar-toggler .icon-bar {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: #667eea;
+        border-radius: 2px;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+        transform-origin: center;
+    }
+    /* Animate to X when open */
+    .navbar-toggler[aria-expanded="true"] .icon-bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    .navbar-toggler[aria-expanded="true"] .icon-bar:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    .navbar-toggler[aria-expanded="true"] .icon-bar:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
     }
 
-    /* Desktop: Light toggler */
+    /* ============================================
+       MOBILE DROPDOWN — Fast CSS transition
+       ============================================ */
+
+    /* Desktop: always show the nav */
     @media (min-width: 992px) {
-        .navbar-toggler {
-            background: rgba(102, 126, 234, 0.1) !important;
-            border: 1.5px solid rgba(102, 126, 234, 0.25) !important;
-        }
-        .navbar-toggler .icon-bar {
-            background: #667eea;
-        }
-        .navbar-toggler:hover,
-        .navbar-toggler:focus {
-            background: rgba(102, 126, 234, 0.18) !important;
-            border-color: rgba(102, 126, 234, 0.4) !important;
+        .header_area #navbarSupportedContent {
+            display: flex !important;
+            max-height: none !important;
         }
     }
 
-    /* ---- Mobile dropdown panel — Light Background ---- */
+    /* Mobile: hidden by default, slides open on toggle */
     @media (max-width: 991px) {
+        /* Override Bootstrap background */
+        .header_area .main_menu,
+        .header_area .navbar {
+            background: #fff !important;
+        }
+
+        .header_area #navbarSupportedContent {
+            display: block !important;
+            overflow: hidden !important;
+            max-height: 0 !important;
+            background: #fff;
+            border-radius: 0 0 14px 14px;
+            padding: 0 16px !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: max-height 0.3s ease !important;
+            width: 100%;
+        }
+        .header_area #navbarSupportedContent.nav-open {
+            max-height: 600px !important;
+            padding: 8px 16px 14px !important;
+        }
+
+        /* Nav links on mobile */
         .header_area .navbar .nav .nav-item .nav-link {
-            line-height: 48px !important;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            color: #555555 !important;
+            line-height: 46px !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            color: #444 !important;
         }
         .header_area .navbar .nav .nav-item .nav-link::after {
             display: none !important;
@@ -291,22 +280,10 @@
         .header_area .navbar .nav .nav-item:hover .nav-link {
             color: #667eea !important;
         }
-        .header_area .navbar-collapse {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 0 0 16px 16px;
-            padding: 12px 20px 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-        }
-        /* Mobile scrolled state - stay light */
-        .header_area.navbar_fixed .navbar-collapse {
-            background: rgba(255, 255, 255, 0.98) !important;
-        }
+
         /* Hire Me on mobile */
         .header_area .navbar .nav .nav-item.hire-me-item {
             margin-left: 0;
-            padding: 12px 0 4px;
             border-bottom: none;
         }
         .header_area .navbar .nav .nav-item.hire-me-item .nav-link {
@@ -315,13 +292,48 @@
             padding: 11px 20px !important;
             line-height: 1 !important;
             border-bottom: none !important;
-            color: #ffffff !important;
-            background: linear-gradient(135deg, #ff6b9d, #667eea) !important;
-            border: none !important;
-            margin-top: 8px;
+            color: #fff !important;
+            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+            margin-top: 10px;
+            border-radius: 8px !important;
         }
     }
     </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggler = document.querySelector('.navbar-toggler');
+        var collapse = document.getElementById('navbarSupportedContent');
+        if (!toggler || !collapse) return;
+
+        function openMenu() {
+            collapse.classList.add('nav-open');
+            toggler.setAttribute('aria-expanded', 'true');
+        }
+        function closeMenu() {
+            collapse.classList.remove('nav-open');
+            toggler.setAttribute('aria-expanded', 'false');
+        }
+
+        toggler.addEventListener('click', function (e) {
+            e.stopPropagation();
+            collapse.classList.contains('nav-open') ? closeMenu() : openMenu();
+        });
+
+        // Close when a nav link is tapped on mobile
+        collapse.querySelectorAll('.nav-link').forEach(function (link) {
+            link.addEventListener('click', function () {
+                if (window.innerWidth < 992) closeMenu();
+            });
+        });
+
+        // Close on outside click
+        document.addEventListener('click', function (e) {
+            if (!toggler.contains(e.target) && !collapse.contains(e.target)) {
+                closeMenu();
+            }
+        });
+    });
+    </script>
 </head>
 
 <body>
@@ -329,7 +341,7 @@
 <!--================Header Menu Area =================-->
 <header class="header_area">
     <div class="main_menu">
-        <nav class="navbar navbar-expand-lg navbar-dark">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background:#fff;">
             <div class="container box_1620">
 
                 <!-- LOGO -->
@@ -343,19 +355,16 @@
                 <!-- TOGGLER -->
                 <button class="navbar-toggler"
                         type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent"
                         aria-expanded="false"
-                        aria-label="Toggle navigation"
-                        onclick="return false;">
+                        aria-label="Toggle navigation">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
 
                 <!-- NAV -->
-                <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                <div class="navbar-collapse offset" id="navbarSupportedContent">
                     <ul class="nav navbar-nav menu_nav ml-auto">
 
                         <li class="nav-item {{ Route::currentRouteName() === 'home' ? 'active' : '' }}">
