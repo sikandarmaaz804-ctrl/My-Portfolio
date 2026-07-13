@@ -243,50 +243,105 @@
 <style>
 /* ══ PUBLIC NOTICE MODAL ══════════════════════════════════════ */
 .notice-overlay {
-    position:fixed;inset:0;background:rgba(10,14,35,.82);
-    backdrop-filter:blur(8px);z-index:9999;
-    display:flex;align-items:center;justify-content:center;padding:20px;
+    position: fixed; inset: 0;
+    background: rgba(8,12,30,.78);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px;
 }
-.notice-overlay.hidden { display:none; }
+.notice-overlay.hidden { display: none; }
+
 .notice-box {
-    background:#fff;border-radius:24px;max-width:560px;width:100%;
-    padding:48px 44px 40px;box-shadow:0 28px 72px rgba(0,0,0,.28);
-    text-align:center;position:relative;
-    animation:noticeIn .38s cubic-bezier(.34,1.56,.64,1) both;
+    background: #fff;
+    border-radius: 16px;
+    max-width: 460px; width: 100%;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
+    animation: noticeIn .36s cubic-bezier(.34,1.4,.64,1) both;
 }
 @keyframes noticeIn {
-    from { opacity:0;transform:scale(.85) translateY(36px); }
-    to   { opacity:1;transform:scale(1) translateY(0); }
+    from { opacity:0; transform:translateY(30px) scale(.96); }
+    to   { opacity:1; transform:translateY(0)    scale(1); }
 }
-.notice-icon {
-    width:76px;height:76px;
-    background:linear-gradient(135deg,rgba(239,68,68,.14),rgba(251,146,60,.12));
-    border-radius:50%;display:flex;align-items:center;justify-content:center;
-    margin:0 auto 20px;border:2px solid rgba(239,68,68,.18);
+
+/* ── Header ── */
+.notice-head {
+    background: linear-gradient(135deg, #0f3d2b 0%, #16a34a 100%);
+    padding: 20px 28px 16px;
+    text-align: center;
+    position: relative; overflow: hidden;
 }
-.notice-icon i { font-size:32px;color:#ef4444; }
-.notice-badge {
-    display:inline-block;
-    background:linear-gradient(135deg,#ef4444,#f97316);
-    color:#fff;font-size:10px;font-weight:800;letter-spacing:2.5px;
-    text-transform:uppercase;border-radius:50px;padding:5px 16px;margin-bottom:16px;
+.notice-head::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(circle at 70% 30%, rgba(255,255,255,.07), transparent 60%);
+    pointer-events:none;
 }
-.notice-box h4 {
-    font-size:1.3rem;font-weight:800;color:#1e293b;margin-bottom:16px;
-    font-family:'Heebo',sans-serif;letter-spacing:.3px;
+.notice-head-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; position: relative; z-index: 1;
 }
-.notice-box p {
-    font-size:14px;line-height:1.9;color:#4b5563;
-    margin:0 0 30px;text-align:left;
+.notice-seal {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,.15);
+    border: 1.5px solid rgba(255,255,255,.28);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
 }
+.notice-seal i { font-size: 17px; color: #fff; }
+.notice-head-text { text-align: left; }
+.notice-tag {
+    display: block;
+    color: rgba(255,255,255,.75);
+    font-size: 8.5px; font-weight: 800; letter-spacing: 2.5px;
+    text-transform: uppercase; margin-bottom: 2px;
+}
+.notice-head h4 {
+    font-size: 1.05rem; font-weight: 800; color: #fff;
+    font-family: 'Heebo', sans-serif; margin: 0; line-height: 1.25;
+}
+.notice-head h4 span { color: #86efac; }
+
+/* ── Body ── */
+.notice-body { padding: 18px 24px 0; }
+
+.notice-highlight {
+    background: #f0fdf4;
+    border-left: 3px solid #16a34a;
+    border-radius: 0 8px 8px 0;
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    font-size: 12.5px; color: #166534; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.notice-highlight i { font-size: 13px; flex-shrink: 0; }
+
+.notice-body p {
+    font-size: 12.5px; line-height: 1.8; color: #4b5563;
+    margin: 0 0 12px;
+}
+.notice-body p:last-of-type { margin-bottom: 0; }
+.notice-body strong { color: #1e293b; font-weight: 700; }
+
+/* ── Footer ── */
+.notice-footer {
+    padding: 14px 24px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+}
+.notice-date { font-size: 10px; color: #9ca3af; font-weight: 500; }
 .btn-notice-ok {
-    display:inline-flex;align-items:center;gap:8px;padding:13px 52px;
-    background:linear-gradient(135deg,#766dff 0%,#88f3ff 100%);
-    color:#fff;border:none;border-radius:50px;font-size:14px;font-weight:700;
-    cursor:pointer;transition:all .3s;box-shadow:0 8px 24px rgba(118,109,255,.38);
-    font-family:'Roboto',sans-serif;
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 28px;
+    background: linear-gradient(135deg, #0f3d2b, #16a34a);
+    color: #fff; border: none; border-radius: 50px;
+    font-size: 12.5px; font-weight: 700;
+    cursor: pointer; transition: all .25s;
+    box-shadow: 0 4px 14px rgba(22,163,74,.32);
+    font-family: 'Roboto', sans-serif;
 }
-.btn-notice-ok:hover { transform:translateY(-2px);box-shadow:0 14px 32px rgba(118,109,255,.55); }
+.btn-notice-ok:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(22,163,74,.45); }
 
 /* ══ RESPONSIVE ═══════════════════════════════════════════════ */
 @media (max-width:991px) {
@@ -310,7 +365,10 @@
     .contact_banner .banner_text h2 { font-size:24px; }
     .social-strip { flex-direction:column;text-align:center; }
     .social-strip .strip-icons { justify-content:center; }
-    .notice-box { padding:36px 24px 30px; }
+    .notice-head { padding: 16px 18px 12px; }
+    .notice-body { padding: 14px 18px 0; }
+    .notice-footer { padding: 12px 18px 16px; flex-direction: column; align-items: stretch; text-align: center; }
+    .btn-notice-ok { justify-content: center; }
     .wa-card-header h3 { font-size:1.6rem; }
 }
 </style>
@@ -474,21 +532,47 @@
 ══════════════════════════════════════════════════════════════ --}}
 <div class="notice-overlay" id="noticeOverlay" role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
     <div class="notice-box">
-        <div class="notice-icon">
-            <i class="fa fa-triangle-exclamation"></i>
+
+        {{-- Header --}}
+        <div class="notice-head">
+            <div class="notice-head-row">
+                <div class="notice-seal"><i class="fa fa-shield-halved"></i></div>
+                <div class="notice-head-text">
+                    <span class="notice-tag">Official Public Notice</span>
+                    <h4 id="noticeTitle">Case Resolved — <span>Arrest Confirmed</span></h4>
+                </div>
+            </div>
         </div>
-        <span class="notice-badge">⚠ Public Notice</span>
-        <h4 id="noticeTitle">Public Notice</h4>
-        <p>
-            An individual is sending harassing content using fake names, email addresses, and phone numbers.<br><br>
-            The sender is being traced through their <strong>IP address</strong> by cybercrime experts, and an
-            <strong>FIR has already been registered</strong>. Legal action is in progress, and the individual
-            will be dealt with according to the law.<br><br>
-            Please do not believe or share any false information.
-        </p>
-        <button class="btn-notice-ok" onclick="document.getElementById('noticeOverlay').classList.add('hidden')">
-            <i class="fa fa-check"></i> I Understand
-        </button>
+
+        {{-- Body --}}
+        <div class="notice-body">
+            <div class="notice-highlight">
+                <i class="fa fa-circle-check"></i>
+                Arrested by the Khyber Pakhtunkhwa (KPK) Police
+            </div>
+            <p>
+                The individual responsible for sending harassing content using <strong>fake identities,
+                spoofed emails, and fabricated phone numbers</strong> has been formally
+                <strong>apprehended and arrested</strong>.
+            </p>
+            <p>
+                We extend our sincere gratitude to the <strong>KPK Police</strong> for their swift
+                action and professionalism. The case is now proceeding through the appropriate
+                legal channels.
+            </p>
+        </div>
+
+        {{-- Footer --}}
+        <div class="notice-footer">
+            <span class="notice-date">
+                <i class="fa fa-calendar-check" style="color:#16a34a;margin-right:4px;"></i>
+                Issued: {{ \Carbon\Carbon::now()->format('d M Y') }}
+            </span>
+            <button class="btn-notice-ok" onclick="document.getElementById('noticeOverlay').classList.add('hidden')">
+                <i class="fa fa-check"></i> Acknowledged
+            </button>
+        </div>
+
     </div>
 </div>
 
