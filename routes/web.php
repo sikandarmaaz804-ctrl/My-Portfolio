@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\PermissionHelper;
 use App\Models\Project;
 
+use App\Http\Controllers\CareerController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\TeamMemberController as AdminTeamController;
+use App\Http\Controllers\Admin\CareerController as AdminCareerController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoleUserController;
 
@@ -66,6 +68,14 @@ Route::get('/contact', function () {
 
 Route::post('/contact', [ContactController::class, 'store'])
     ->name('contact.store');
+
+/*
+|--------------------------------------------------------------------------
+| CAREERS (USER SIDE)
+|--------------------------------------------------------------------------
+*/
+Route::get('/careers', [CareerController::class, 'index'])->name('careers');
+Route::post('/careers', [CareerController::class, 'store'])->name('careers.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -249,6 +259,22 @@ Route::middleware('admin.auth')->prefix('admin')->group(function () {
 
     Route::get('/messages', [AdminContactController::class, 'index'])
         ->name('admin.messages')->middleware('permission:contacts.view');
+
+    /*
+    |--------------------------------------------------------------------------
+    | CAREER APPLICATIONS (ADMIN)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/careers', [AdminCareerController::class, 'index'])
+        ->name('admin.careers.index')->middleware('permission:careers.view');
+    Route::get('/careers/{career}', [AdminCareerController::class, 'show'])
+        ->name('admin.careers.show')->middleware('permission:careers.view');
+    Route::patch('/careers/{career}/status', [AdminCareerController::class, 'updateStatus'])
+        ->name('admin.careers.status')->middleware('permission:careers.status');
+    Route::delete('/careers/{career}', [AdminCareerController::class, 'destroy'])
+        ->name('admin.careers.destroy')->middleware('permission:careers.delete');
+    Route::delete('/careers-delete-all', [AdminCareerController::class, 'destroyAll'])
+        ->name('admin.careers.destroyAll')->middleware('permission:careers.delete');
 
     // System Utilities
     Route::get('/system', [AdminController::class, 'system'])

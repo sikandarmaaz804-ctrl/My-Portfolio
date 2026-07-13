@@ -692,6 +692,22 @@
     </div>
     @endif
 
+    <!-- ── Careers ─────────────────────────────── -->
+    @if(PermissionHelper::can('careers.view'))
+    <div class="sidebar-section">
+        <div class="sidebar-section-label">Hiring</div>
+
+        <a href="{{ route('admin.careers.index') }}"
+           class="nav-link-item {{ request()->routeIs('admin.careers*') ? 'active' : '' }}">
+            <i class="bi bi-person-lines-fill"></i> Career Applications
+            @php $newApps = \App\Models\CareerApplication::where('status', 'new')->count(); @endphp
+            @if($newApps > 0)
+                <span class="nav-badge">{{ $newApps }}</span>
+            @endif
+        </a>
+    </div>
+    @endif
+
     <!-- ── System ───────────────────────────────────── -->
     @php
         $showSystemLink = PermissionHelper::can('system.view');

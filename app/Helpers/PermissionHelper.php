@@ -15,6 +15,7 @@ class PermissionHelper
         'team.view' => 'admin.team.index',
         'team.create' => 'admin.team.create',
         'contacts.view' => 'admin.contacts.index',
+        'careers.view' => 'admin.careers.index',
         'resume.view' => 'admin.resume',
         'system.view' => 'admin.system',
         'roles.view' => 'admin.roles.index',

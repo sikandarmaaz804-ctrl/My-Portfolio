@@ -31,6 +31,7 @@ class Permission extends Model
             'projects'   => 'Projects',
             'team'       => 'Team Members',
             'contacts'   => 'Contacts / Messages',
+            'careers'    => 'Career Applications',
             'resume'     => 'Resume',
             'system'     => 'System Utilities',
             'roles'      => 'Roles & Permissions',
@@ -78,6 +79,11 @@ class Permission extends Model
             // System
             ['module' => 'system', 'slug' => 'system.view', 'name' => 'View System Utilities'],
             ['module' => 'system', 'slug' => 'system.run',  'name' => 'Run System Commands'],
+
+            // Career Applications
+            ['module' => 'careers', 'slug' => 'careers.view',   'name' => 'View Career Applications'],
+            ['module' => 'careers', 'slug' => 'careers.status', 'name' => 'Update Application Status'],
+            ['module' => 'careers', 'slug' => 'careers.delete', 'name' => 'Delete Career Applications'],
 
             // Roles & Permissions
             ['module' => 'roles', 'slug' => 'roles.view',   'name' => 'View Roles'],

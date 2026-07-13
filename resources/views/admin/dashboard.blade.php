@@ -12,6 +12,8 @@
     $messageCount = \App\Models\Contact::count();
     $projectCount = \App\Models\Project::count();
     $commentCount = \App\Models\Comment::count();
+    $careerCount  = \App\Models\CareerApplication::count();
+    $newCareerCount = \App\Models\CareerApplication::where('status', 'new')->count();
 
     $recentBlogs    = \App\Models\Blog::latest()->take(5)->get();
     $recentMessages = \App\Models\Contact::latest()->take(5)->get();
@@ -28,7 +30,8 @@
         || PermissionHelper::can('contacts.view')
         || PermissionHelper::can('projects.view')
         || PermissionHelper::can('blogs.create')
-        || PermissionHelper::can('projects.create');
+        || PermissionHelper::can('projects.create')
+        || PermissionHelper::can('careers.view');
 
     $quickLinks = [
         ['permission' => 'blogs.view', 'route' => 'admin.blogs', 'icon' => 'bi-journal-text', 'label' => 'Blogs'],
@@ -38,6 +41,7 @@
         ['permission' => 'team.view', 'route' => 'admin.team.index', 'icon' => 'bi-people', 'label' => 'Team'],
         ['permission' => 'team.create', 'route' => 'admin.team.create', 'icon' => 'bi-person-plus', 'label' => 'Add Member'],
         ['permission' => 'contacts.view', 'route' => 'admin.contacts.index', 'icon' => 'bi-envelope', 'label' => 'Messages'],
+        ['permission' => 'careers.view', 'route' => 'admin.careers.index', 'icon' => 'bi-person-lines-fill', 'label' => 'Career Applications'],
         ['permission' => 'resume.view', 'route' => 'admin.resume', 'icon' => 'bi-file-earmark-person', 'label' => 'Resume'],
     ];
 @endphp
@@ -153,6 +157,25 @@
                 <div class="value">{{ $commentCount }}</div>
             </div>
         </div>
+    </div>
+    @endif
+
+    @if(PermissionHelper::can('careers.view'))
+    <div class="col-sm-6 col-xl-3">
+        <a href="{{ route('admin.careers.index') }}" style="text-decoration:none;display:block;">
+            <div class="stat-card" style="border-color:{{ $newCareerCount > 0 ? 'rgba(139,92,246,.25)' : 'var(--border)' }};">
+                <div class="stat-icon" style="background:rgba(139,92,246,.12);color:#7c3aed;"><i class="bi bi-person-lines-fill"></i></div>
+                <div class="stat-info">
+                    <div class="label">Job Applications</div>
+                    <div class="value">{{ $careerCount }}</div>
+                    @if($newCareerCount > 0)
+                    <div style="font-size:11px;font-weight:700;color:#7c3aed;margin-top:4px;">
+                        {{ $newCareerCount }} new
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </a>
     </div>
     @endif
 
