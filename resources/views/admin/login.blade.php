@@ -457,7 +457,7 @@
 
             <!-- Logo image — big, centered, fills the panel -->
             <div class="logo-img-wrap">
-                <img src="{{ asset('img/mlogo.png') }}" alt="Maaz Sikandar Logo">
+                <img src="{{ asset('img/mlogo.png') }}" alt="Maaz Sikandar Logo" style="width: 100%; max-width: 420px; height: auto;">
             </div>
 
             <!-- Tagline -->
