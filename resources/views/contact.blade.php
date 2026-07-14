@@ -241,108 +241,6 @@
 </style>
 
 <style>
-/* ══ PUBLIC NOTICE MODAL ══════════════════════════════════════ */
-.notice-overlay {
-    position: fixed; inset: 0;
-    background: rgba(8,12,30,.78);
-    backdrop-filter: blur(10px);
-    z-index: 9999;
-    display: flex; align-items: center; justify-content: center;
-    padding: 16px;
-}
-.notice-overlay.hidden { display: none; }
-
-.notice-box {
-    background: #fff;
-    border-radius: 16px;
-    max-width: 460px; width: 100%;
-    overflow: hidden;
-    box-shadow: 0 24px 60px rgba(0,0,0,.22), 0 0 0 1px rgba(0,0,0,.06);
-    animation: noticeIn .36s cubic-bezier(.34,1.4,.64,1) both;
-}
-@keyframes noticeIn {
-    from { opacity:0; transform:translateY(30px) scale(.96); }
-    to   { opacity:1; transform:translateY(0)    scale(1); }
-}
-
-/* ── Header ── */
-.notice-head {
-    background: linear-gradient(135deg, #0f3d2b 0%, #16a34a 100%);
-    padding: 20px 28px 16px;
-    text-align: center;
-    position: relative; overflow: hidden;
-}
-.notice-head::before {
-    content:''; position:absolute; inset:0;
-    background: radial-gradient(circle at 70% 30%, rgba(255,255,255,.07), transparent 60%);
-    pointer-events:none;
-}
-.notice-head-row {
-    display: flex; align-items: center; justify-content: center;
-    gap: 10px; position: relative; z-index: 1;
-}
-.notice-seal {
-    width: 40px; height: 40px;
-    background: rgba(255,255,255,.15);
-    border: 1.5px solid rgba(255,255,255,.28);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-}
-.notice-seal i { font-size: 17px; color: #fff; }
-.notice-head-text { text-align: left; }
-.notice-tag {
-    display: block;
-    color: rgba(255,255,255,.75);
-    font-size: 8.5px; font-weight: 800; letter-spacing: 2.5px;
-    text-transform: uppercase; margin-bottom: 2px;
-}
-.notice-head h4 {
-    font-size: 1.05rem; font-weight: 800; color: #fff;
-    font-family: 'Heebo', sans-serif; margin: 0; line-height: 1.25;
-}
-.notice-head h4 span { color: #86efac; }
-
-/* ── Body ── */
-.notice-body { padding: 18px 24px 0; }
-
-.notice-highlight {
-    background: #f0fdf4;
-    border-left: 3px solid #16a34a;
-    border-radius: 0 8px 8px 0;
-    padding: 9px 14px;
-    margin-bottom: 14px;
-    font-size: 12.5px; color: #166534; font-weight: 700;
-    display: flex; align-items: center; gap: 8px;
-}
-.notice-highlight i { font-size: 13px; flex-shrink: 0; }
-
-.notice-body p {
-    font-size: 12.5px; line-height: 1.8; color: #4b5563;
-    margin: 0 0 12px;
-}
-.notice-body p:last-of-type { margin-bottom: 0; }
-.notice-body strong { color: #1e293b; font-weight: 700; }
-
-/* ── Footer ── */
-.notice-footer {
-    padding: 14px 24px 18px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; flex-wrap: wrap;
-}
-.notice-date { font-size: 10px; color: #9ca3af; font-weight: 500; }
-.btn-notice-ok {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 9px 28px;
-    background: linear-gradient(135deg, #0f3d2b, #16a34a);
-    color: #fff; border: none; border-radius: 50px;
-    font-size: 12.5px; font-weight: 700;
-    cursor: pointer; transition: all .25s;
-    box-shadow: 0 4px 14px rgba(22,163,74,.32);
-    font-family: 'Roboto', sans-serif;
-}
-.btn-notice-ok:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(22,163,74,.45); }
-
 /* ══ RESPONSIVE ═══════════════════════════════════════════════ */
 @media (max-width:991px) {
     .contact_banner .banner_inner,.contact_banner { min-height:420px; }
@@ -365,10 +263,6 @@
     .contact_banner .banner_text h2 { font-size:24px; }
     .social-strip { flex-direction:column;text-align:center; }
     .social-strip .strip-icons { justify-content:center; }
-    .notice-head { padding: 16px 18px 12px; }
-    .notice-body { padding: 14px 18px 0; }
-    .notice-footer { padding: 12px 18px 16px; flex-direction: column; align-items: stretch; text-align: center; }
-    .btn-notice-ok { justify-content: center; }
     .wa-card-header h3 { font-size:1.6rem; }
 }
 </style>
@@ -526,54 +420,5 @@
 
     </div>
 </section>
-
-{{-- ══════════════════════════════════════════════════════════════
-     PUBLIC NOTICE MODAL
-══════════════════════════════════════════════════════════════ --}}
-<div class="notice-overlay" id="noticeOverlay" role="dialog" aria-modal="true" aria-labelledby="noticeTitle">
-    <div class="notice-box">
-
-        {{-- Header --}}
-        <div class="notice-head">
-            <div class="notice-head-row">
-                <div class="notice-seal"><i class="fa fa-shield-halved"></i></div>
-                <div class="notice-head-text">
-                    <span class="notice-tag">Official Public Notice</span>
-                    <h4 id="noticeTitle">Case Resolved — <span>Arrest Confirmed</span></h4>
-                </div>
-            </div>
-        </div>
-
-        {{-- Body --}}
-        <div class="notice-body">
-            <div class="notice-highlight">
-                <i class="fa fa-circle-check"></i>
-                Arrested by the Khyber Pakhtunkhwa (KPK) Police
-            </div>
-            <p>
-                The individual responsible for sending harassing content using <strong>fake identities,
-                spoofed emails, and fabricated phone numbers</strong> has been formally
-                <strong>apprehended and arrested</strong>.
-            </p>
-            <p>
-                We extend our sincere gratitude to the <strong>KPK Police</strong> for their swift
-                action and professionalism. The case is now proceeding through the appropriate
-                legal channels.
-            </p>
-        </div>
-
-        {{-- Footer --}}
-        <div class="notice-footer">
-            <span class="notice-date">
-                <i class="fa fa-calendar-check" style="color:#16a34a;margin-right:4px;"></i>
-                Issued: {{ \Carbon\Carbon::now()->format('d M Y') }}
-            </span>
-            <button class="btn-notice-ok" onclick="document.getElementById('noticeOverlay').classList.add('hidden')">
-                <i class="fa fa-check"></i> Acknowledged
-            </button>
-        </div>
-
-    </div>
-</div>
 
 @endsection
