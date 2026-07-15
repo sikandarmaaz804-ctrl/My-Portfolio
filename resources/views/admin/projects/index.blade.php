@@ -63,7 +63,9 @@
                             $categoryLabels = [
                                 'manipul' => 'Web Development',
                                 'creative' => 'UI/UX Design',
-                                'brand' => 'Branding'
+                                'brand' => 'Branding',
+                                'mobile' => 'Mobile Applications',
+                                'desktop' => 'Desktop Applications',
                             ];
                             $label = $categoryLabels[$project->category] ?? $project->category;
                         @endphp

@@ -751,6 +751,8 @@
                     'manipul'  => 'Web Development',
                     'creative' => 'UI/UX Design',
                     'brand'    => 'Branding',
+                    'mobile'   => 'Mobile Applications',
+                    'desktop'  => 'Desktop Applications',
                 ];
                 $categoryLabel = $categoryLabels[$project->category] ?? ucfirst($project->category);
             @endphp

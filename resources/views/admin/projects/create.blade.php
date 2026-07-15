@@ -55,6 +55,8 @@
                         <option value="manipul"  {{ old('category') === 'manipul'  ? 'selected' : '' }}>Web Development</option>
                         <option value="creative" {{ old('category') === 'creative' ? 'selected' : '' }}>UI/UX Design</option>
                         <option value="brand"    {{ old('category') === 'brand'    ? 'selected' : '' }}>Branding</option>
+                        <option value="mobile"   {{ old('category') === 'mobile'   ? 'selected' : '' }}>Mobile Applications</option>
+                        <option value="desktop"  {{ old('category') === 'desktop'  ? 'selected' : '' }}>Desktop Applications</option>
                     </select>
                     @error('category')
                         <div style="color:var(--danger); font-size:12px; margin-top:4px;">{{ $message }}</div>

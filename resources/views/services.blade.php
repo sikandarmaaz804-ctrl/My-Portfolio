@@ -416,6 +416,10 @@
 .service-card:nth-child(4) { animation-delay: 0.4s; }
 .service-card:nth-child(5) { animation-delay: 0.5s; }
 .service-card:nth-child(6) { animation-delay: 0.6s; }
+.service-card:nth-child(7) { animation-delay: 0.7s; }
+.service-card:nth-child(8) { animation-delay: 0.8s; }
+.service-card:nth-child(9) { animation-delay: 0.9s; }
+.service-card:nth-child(10) { animation-delay: 1.0s; }
 
 .testi-card:nth-child(1) { animation-delay: 0.1s; }
 .testi-card:nth-child(2) { animation-delay: 0.25s; }
@@ -541,6 +545,54 @@
                 </div>
             </div>
 
+            <!-- Graphic Design -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <h4>Graphic Designing</h4>
+                    <p>Eye-catching visuals that communicate your brand's message powerfully. From logos and brand identities to marketing materials, social media graphics, and UI mockups — pixel-perfect design crafted with creativity.</p>
+                    <span class="service-badge">Design</span>
+                </div>
+            </div>
+
+            <!-- AI Automation -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h4>AI Automation</h4>
+                    <p>Supercharge your business with intelligent automation. I build AI-powered workflows, chatbots, data pipelines, and smart integrations using tools like OpenAI, LangChain, and custom ML models to save time and boost efficiency.</p>
+                    <span class="service-badge">AI / Automation</span>
+                </div>
+            </div>
+
+            <!-- Mobile App Development -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <h4>Mobile App Development</h4>
+                    <p>Cross-platform mobile apps built with Flutter and React Native, plus native Android apps using Kotlin. Beautiful, performant apps for iOS and Android that deliver a smooth user experience from launch to scale.</p>
+                    <span class="service-badge">Mobile</span>
+                </div>
+            </div>
+
+            <!-- Desktop App Development -->
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fa-solid fa-desktop"></i>
+                    </div>
+                    <h4>Desktop App Development</h4>
+                    <p>Robust Windows desktop applications developed with C# and the .NET framework. From business tools and admin dashboards to data management systems — clean, maintainable code with a polished modern UI.</p>
+                    <span class="service-badge">Desktop</span>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -563,7 +615,7 @@
             </div>
             <div class="col-6 col-md-3">
                 <div class="stat-item" style="animation-delay:0.2s">
-                    <div class="stat-number">6+</div>
+                    <div class="stat-number">10+</div>
                     <div class="stat-label">Technologies</div>
                 </div>
             </div>

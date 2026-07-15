@@ -41,6 +41,8 @@ Route::get('/portfolio', function () {
         'manipul'  => 'Web Development',
         'creative' => 'UI/UX Design',
         'brand'    => 'Branding',
+        'mobile'   => 'Mobile Applications',
+        'desktop'  => 'Desktop Applications',
     ];
 
     // Only include categories that actually exist in the DB
