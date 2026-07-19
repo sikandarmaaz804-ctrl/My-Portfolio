@@ -199,7 +199,7 @@
                 <div style="display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--border);">
                     <img src="{{ $blog->image_url }}"
                          style="width:46px; height:46px; border-radius:10px; object-fit:cover; flex-shrink:0;"
-                         onerror="this.src='https://via.placeholder.com/46'">
+                         onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'46\' height=\'46\' viewBox=\'0 0 46 46\'%3E%3Crect width=\'46\' height=\'46\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'18\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
                     <div style="flex:1; min-width:0;">
                         <div style="font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                             {{ $blog->title }}
@@ -322,7 +322,7 @@
                         <div style="border-radius:12px; overflow:hidden; border:1px solid var(--border);">
                             <img src="{{ asset('uploads/'.$project->image1) }}"
                                  style="width:100%; height:90px; object-fit:cover; display:block;"
-                                 onerror="this.src='https://via.placeholder.com/200x90'">
+                                 onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'90\' viewBox=\'0 0 200 90\'%3E%3Crect width=\'200\' height=\'90\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'28\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
                             <div style="padding:8px; background:#fff;">
                                 <div style="font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                                     {{ $project->title }}

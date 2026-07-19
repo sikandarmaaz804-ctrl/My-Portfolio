@@ -305,7 +305,7 @@ textarea.cf-input {
 <div class="popup-hero">
     <img src="{{ $blog->image_url }}"
          alt="{{ $blog->title }}"
-         onerror="this.src='https://via.placeholder.com/900x380/766dff/fff?text=Blog'">
+         onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'900\' height=\'380\'%3E%3Crect width=\'900\' height=\'380\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'48\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
     <div class="ph-overlay"></div>
     <div class="ph-meta">
         <h2>{{ $blog->title }}</h2>

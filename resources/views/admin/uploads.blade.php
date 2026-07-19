@@ -57,7 +57,7 @@
                 <img src="{{ $blog->image_url }}"
                      class="media-img"
                      style="width:100%; height:160px; object-fit:cover; display:block; transition:transform 0.3s;"
-                     onerror="this.src='https://via.placeholder.com/300x160'">
+                     onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'160\'%3E%3Crect width=\'300\' height=\'160\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'32\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
                 <!-- Overlay on hover -->
                 <div class="media-overlay" style="position:absolute; inset:0; background:rgba(15,23,42,0.55); display:flex; align-items:center; justify-content:center; gap:10px; opacity:0; transition:opacity 0.25s;">
                     <a href="{{ $blog->image_url }}" target="_blank"

@@ -27,7 +27,7 @@
             <div style="position:relative; overflow:hidden;">
                 <img src="{{ $blog->image_url }}"
                      style="width:100%; height:180px; object-fit:cover; display:block;"
-                     onerror="this.src='https://via.placeholder.com/400x180'">
+                     onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'180\'%3E%3Crect width=\'400\' height=\'180\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'36\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
                 <div style="position:absolute; top:10px; right:10px;">
                     <span class="badge-status read">Published</span>
                 </div>

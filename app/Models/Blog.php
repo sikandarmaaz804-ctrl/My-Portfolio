@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\File;
 
 class Blog extends Model
 {
@@ -21,19 +20,19 @@ class Blog extends Model
     public function getImageUrlAttribute(): string
     {
         if (!$this->image) {
-            return 'https://via.placeholder.com/600x210/766dff/fff?text=Blog';
+            return asset('img/placeholder-blog.svg');
         }
 
+        // DB stores either "blogs/filename.ext" or legacy "filename.ext"
+        // Always serve from uploads/ — works both locally and on Hostinger
         $path = ltrim($this->image, '/');
 
+        // Already prefixed correctly
         if (str_starts_with($path, 'uploads/')) {
             return asset($path);
         }
 
-        if (File::exists(public_path('uploads/' . $path))) {
-            return asset('uploads/' . $path);
-        }
-
-        return asset($path);
+        // Normalize: prepend uploads/
+        return asset('uploads/' . $path);
     }
 }

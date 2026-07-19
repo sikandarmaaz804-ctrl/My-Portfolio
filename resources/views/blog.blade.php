@@ -754,11 +754,8 @@
                     <div class="col-md-6 mb-4 blog-col" data-title="{{ strtolower($blog->title) }}" data-cat="{{ strtolower($blog->category ?? 'general') }}">
                         <div class="blog-card">
                             <div class="img-wrap">
-                                @if($blog->image)
-                                <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}" onerror="this.src='https://via.placeholder.com/600x210/766dff/fff?text=Blog'">
-                                @else
-                                <img src="https://via.placeholder.com/600x210/766dff/fff?text=Blog" alt="{{ $blog->title }}">
-                                @endif
+                                <img src="{{ $blog->image_url }}" alt="{{ $blog->title }}"
+                                     onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'210\'%3E%3Crect width=\'600\' height=\'210\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'40\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
                                 <span class="cat-badge">{{ $blog->category ?? 'General' }}</span>
                                 <div class="img-overlay openBlogModal" data-id="{{ $blog->id }}">
                                     <div class="play-icon"><i class="fa fa-book-open"></i></div>
@@ -835,7 +832,7 @@
                         @foreach($blogs->take(4) as $recent)
                         <div class="recent-post openBlogModal" data-id="{{ $recent->id }}">
                             <img src="{{ $recent->image_url }}" alt="{{ $recent->title }}"
-                                 onerror="this.src='https://via.placeholder.com/56x56/766dff/fff'">
+                                 onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'56\' height=\'56\'%3E%3Crect width=\'56\' height=\'56\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'55%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'22\' fill=\'%2394a3b8\'%3E✦%3C/text%3E%3C/svg%3E'">
                             <div class="rp-info">
                                 <div class="rp-title">{{ Str::limit($recent->title, 48) }}</div>
                                 <div class="rp-date"><i class="fa fa-calendar" style="font-size:9px;"></i> {{ $recent->created_at->format('M d, Y') }}</div>

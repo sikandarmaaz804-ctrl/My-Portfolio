@@ -652,8 +652,7 @@
                         </div>
                         <div class="testi-stars">★★★★½</div>
                     </div>
-                </div>
-            </div>
+                </div>            </div>
 
             <div class="col-lg-4 col-md-6">
                 <div class="testi-card">
