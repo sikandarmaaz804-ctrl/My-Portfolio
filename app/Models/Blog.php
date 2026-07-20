@@ -23,16 +23,19 @@ class Blog extends Model
             return asset('img/placeholder-blog.svg');
         }
 
-        // DB stores either "blogs/filename.ext" or legacy "filename.ext"
-        // Always serve from uploads/ — works both locally and on Hostinger
         $path = ltrim($this->image, '/');
 
-        // Already prefixed correctly
+        // Already a full uploads/ path (shouldn't happen with new code, just safety)
         if (str_starts_with($path, 'uploads/')) {
             return asset($path);
         }
 
-        // Normalize: prepend uploads/
+        // Legacy records saved with "blogs/filename" prefix — strip it, file is in uploads/
+        if (str_starts_with($path, 'blogs/')) {
+            $path = substr($path, strlen('blogs/'));
+        }
+
+        // All files live directly in uploads/
         return asset('uploads/' . $path);
     }
 }

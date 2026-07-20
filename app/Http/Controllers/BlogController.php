@@ -70,7 +70,7 @@ class BlogController extends Controller
             'description' => 'required'
         ]);
 
-        $uploadPath = public_path('uploads/blogs');
+        $uploadPath = public_path('uploads');
 
         if (!File::exists($uploadPath)) {
             File::makeDirectory($uploadPath, 0755, true);
@@ -81,10 +81,10 @@ class BlogController extends Controller
         $imageName = now()->format('YmdHis') . '_' . Str::slug($baseName) . '.' . $extension;
         $request->file('image')->move($uploadPath, $imageName);
 
-        // Save blog
+        // Save just the filename — no subfolder prefix
         Blog::create([
             'title' => $request->title,
-            'image' => 'blogs/' . $imageName,
+            'image' => $imageName,
             'description' => $request->description,
         ]);
 
@@ -123,11 +123,19 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail($id);
 
-        // delete image safely
-        $imagePath = public_path('uploads/' . $blog->image);
+        if ($blog->image) {
+            $path = ltrim($blog->image, '/');
 
-        if (File::exists($imagePath)) {
-            File::delete($imagePath);
+            // Legacy: stored as "blogs/filename" — file lives at uploads/filename
+            if (str_starts_with($path, 'blogs/')) {
+                $path = substr($path, strlen('blogs/'));
+            }
+
+            $imagePath = public_path('uploads/' . $path);
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
+            }
         }
 
         $blog->delete();
